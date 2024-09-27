@@ -1,0 +1,32 @@
+HTML <tags>:
+
+<nav>
+<div>
+<p>
+<ul>
+<li>
+<a>
+<header>
+<main>
+<footer>
+<br>
+<hr>
+<meta>
+<input>
+<button>
+<bdo>
+<fieldset>
+<legend>
+
+CSS properties:
+
+display
+font-size
+text-decoration-line
+color
+background-color
+margin
+padding
+
+Bootstrap feature: Navbar - Used to create a pretty navigation bar linking each html pages together
+Javascript: scripting to check for quiz answers

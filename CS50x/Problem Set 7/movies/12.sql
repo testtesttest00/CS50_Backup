@@ -1,0 +1,62 @@
+SELECT title FROM movies
+ JOIN stars ON movies.id = stars.movie_id
+  JOIN people ON stars.person_id = people.id
+   WHERE name = 'Jennifer Lawrence' OR name = 'Bradley Cooper' GROUP BY title HAVING COUNT(title) > 1;
+
+-- Duck Debugger:
+--SELECT title
+--FROM movies
+--JOIN stars AS s1 ON movies.id = s1.movie_id
+--JOIN people AS p1 ON s1.person_id = p1.id
+--JOIN stars AS s2 ON movies.id = s2.movie_id
+--JOIN people AS p2 ON s2.person_id = p2.id
+--WHERE p1.name = 'Jennifer Lawrence' AND p2.name = 'Bradley Cooper';
+--
+-- How it works:
+-- movies: movie1, movie2, movie3
+-- stars: star1, star2, star3, star4  | star1:mov1,act1 star2:mov1,act2, star3:mov2,act1, star4:mov3,act1
+-- actors: actor1, actor2
+--
+-- sqlite> SELECT title FROM movies:
+-- title:(movie1, movie2, movie3)
+--
+-- sqlite> SELECT * FROM movies JOIN stars as s1 JOIN people as p1
+-- movie.title: (movie1, movie1, movie2, movie3)
+-- movie.id:    (01,     01,     02,     03)
+-- stars.movid: (01,     01,     02,     03)    additional movie id when doing:
+-- stars.perid: (01,     02,     01,     01)    movie JOIN stars on movie.id = stars.movid
+-- people.id:   (01,     02,     01,     01)
+-- people.name: (actor1, actor2, actor1, actor1)
+--
+--              star1   star2   star3   star4
+--             mv1-ac1 mv1-ac2 mv2-ac1 mv3-ac1
+--
+--
+-- sqlite> SELECT * FROM movies JOIN stars as s1 JOIN people as p1 JOIN stars as s2 JOIN people as p2
+-- movie.title: (movie1, movie1, movie1, movie1, movie2, movie3)
+-- movie.id:    (01,     01,     01,     01,     02,     03)
+-- s1.movid:    (01,     01,     01,     01,     02,     03)      movie JOIN star as s1
+-- s1.perid:    (01,     01,     02,     02,     01,     01)      ON movie.id = s1.movid
+-- p1.id:       (01,     01,     02,     02,     01,     01)      JOIN people as p1 ON s1.perid = people.id
+-- p1.name:     (actor1, actor1, actor2, actor2, actor1, actor1)
+-- s2.movid:    (01,     01,     01,     01,     02,     03)      JOIN star as s2
+-- s2.perid:    (01,     02,     01,     02,     01,     01)      ON movie.id = s2.movid (or ON s1.movid = s2.movid)
+-- p2.id:       (01,     02,     01,     02,     01,     01)      JOIN people as p2 ON s2.perid = people.id
+-- p2.name:     (actor1, actor2, actor1, actor2, actor1, actor1)
+--
+--              star1   star1   star2   star2   star3   star4
+--             mv1-ac1 mv1-ac1 mv1-ac2 mv1-ac2 mv2-ac1 mv3-ac1
+--              star1   star2   star1   star2   star3   star4
+--             mv1-ac1 mv1-ac2 mv1-ac1 mv1-ac2 mv2-ac1 mv3-ac1
+--
+-- WHERE p1 = actor1, p2 = actor2
+-- movie.title: (movie1)   ---> SELECT title FROM movie...
+-- movie.id:    (01)
+-- stars.movid: (01)
+-- stars.perid: (01)
+-- people.id:   (01)
+-- people.name: (actor1)
+-- stars.movid: (01)
+-- stars.perid: (02)
+-- people.id:   (02)
+-- people.name: (actor2)

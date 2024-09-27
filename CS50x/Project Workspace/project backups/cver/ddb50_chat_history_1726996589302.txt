@@ -1,0 +1,22 @@
+user: const char* getfield(char* line, int num)
+{
+    const char* tok;
+    for (tok = strtok(line, ";");
+            tok && *tok;
+            tok = strtok(NULL, ";\n"))
+    {
+        if (!--num)
+            return tok;
+    }
+    return NULL;
+}
+
+i found this on stackoverflow, i wanted to ask why in the last part of the forloop, strtok's delimiter is ";\n" instead of just ";"
+
+assistant: The delimiter in `strtok` is used to specify all the characters that should be considered as separators. In this case, using `";\n"` means that both the semicolon (`;`) and the newline character (`\n`) are treated as delimiters. This can be useful if the input lines might end with a newline character, ensuring that `strtok` correctly handles the end of the line.
+
+If you only use `";"`, `strtok` will not consider the newline character as a delimiter, which might lead to unexpected results if the input line ends with a newline.
+
+user: ah i see i understand now. thank you
+
+assistant: You're welcome! If you have any more questions, feel free to ask.

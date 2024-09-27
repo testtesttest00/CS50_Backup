@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Home
+{% endblock %}
+
+
+{% block main %}
+    <div style="position:absolute; top:6em; right:1em;display:inline-flex">
+        <span style="padding:0em 1em;">welcome back, <span style="font-weight:bold">{{ user }}</span></span>
+        <form action="/quote" method="post">
+            <input type="text" name="symbol" autofocus autocomplete="off" placeholder="Search for (e.g. AAPL)"/>
+        </form>
+    </div>
+    <div class="mb-3">
+        <h1>homepage</h1>
+        <hr/>
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Quantity Held</th>
+                    <th scope="col">Current Price</th>
+                    <th scope="col">Holding Value</th>
+                </tr>
+            </thead>
+            <tmain>
+                {% set holdings = namespace(total=0.0) %}
+                {% for symbol in summary %}
+                    <tr>
+                        <td>{{ symbol }}</td>
+                        <td>{{ summary[symbol]["quantity"] }}</td>
+                        <td>${{ '%0.2f' % summary[symbol]["price"] | float }}</td>
+                        <td>${{ '%0.2f' % summary[symbol]["total"] | float }}</td>
+                        {% set holdings.total = summary[symbol]["total"] + holdings.total %}
+                    </tr>
+                {% endfor %}
+            </tmain>
+            <tfoot>
+                <tr>
+                    <td colspan="2">Cash Balance: ${{ '%0.2f' % cash | float }}</td>
+                    <td colspan="2">Grand Total: ${{ '%0.2f' % (cash + holdings.total) | float }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

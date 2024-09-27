@@ -1,0 +1,15 @@
+hello! this is my final project for cs50x. my project is an extension of what i did in my final project in cs50p, where i built a
+minigame player consisting of 3 games on python. for cs50x, i focused on adding a new game, 15 puzzle, where a grid of 4x4 tiles are
+scrambled and players have to slide a blank tile to reorganise the grid. in order to show my growth in cs50p, i also implemented the
+game on c and on html with the help of flask and sql. i wanted to make use of every new language introduced to me during the course
+for this final project.
+
+--------------------------------------------------------------------------------
+
+your project’s title;				        	simple minigames v2
+your name; 						                yi kang
+your GitHub and edX usernames;		        	git-testtesttest00 // edx-testtesttest_0
+your city and country;					        singapore // singapore
+and, the date you have recorded this video.		24 september 2024
+
+--------------------------------------------------------------------------------

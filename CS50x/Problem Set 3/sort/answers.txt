@@ -1,0 +1,14 @@
+sort1 uses: Bubble Sort
+
+How do you know?: sorted50000 - no delay, random & reversed50000 - long delay:
+optimised bubble sort, sorted50000 - omega(N) (faster), random & reversed50000 - theta(N^2) and O(N^2) respectively (slower).
+
+sort2 uses: Merge Sort
+
+How do you know?: random, reversed & sorted50000 - no delay:
+random, reversed & sorted50000 - theta(NlogN), O(NlogN) & omega(NlogN) respectively (similar speed, faster than the N^2 in other sorts)
+
+sort3 uses: Selection Sort
+
+How do you know?: random, reversed & sorted50000 - long delay:
+random, reversed & sorted50000 - theta(N^2), O(N^2) & omega(N^2) respectively (similar speed, slower than sort2)

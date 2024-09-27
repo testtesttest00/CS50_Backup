@@ -1,0 +1,35 @@
+.custom-container {
+    padding: 1% 0em 0.5% 0em;
+    margin: 10px 0px;
+    background-color: rgba(255, 50, 50, 0.8);
+
+    li {
+        display: inline-block;
+        margin: 0px 8px;
+        font-size: 16px;
+
+        &[title]{
+            font-size: 24px;
+        }
+    }
+}
+
+a {
+    margin: auto;
+    text-decoration-line: none;
+    color: black;
+    &:hover{
+        color: rgba(60,60,70);
+    }
+    &:active{
+        color: rgba(100,100,110);
+    }
+}
+
+footer {
+    color: #f6f6f6ff;
+}
+
+main {
+    margin: auto 2em;
+}

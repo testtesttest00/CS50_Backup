@@ -1,0 +1,5 @@
+Flask
+Flask-Session
+sqlite3
+json
+random

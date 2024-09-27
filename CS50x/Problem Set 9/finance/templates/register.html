@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Register
+{% endblock %}
+
+
+{% block main %}
+    <div>
+        {% if value == "success" %}
+            <p>Successfully registered</p>
+            <p>Return to <a href="/login">login page</a>.</p>
+        {% else %}
+            <form action="/register" method="post">
+                <div class="mb-3">
+                    <input type="text" name="username" autofocus autocomplete="off" placeholder="Username"/>
+                </div>
+                <div class="mb-3">
+                    <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                </div>
+                <div class="mb-3">
+                    <input type="password" name="confirmation" autocomplete="off" placeholder="Confirm Password"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+hello! this is my final project for cs50p. it consists of a few minigames that i, with no prior coding experience, could manage with
+and a scoresheet to keep track of scores. the code is probably very unoptimised but i did what i could :P
+(i spent way too much time on the coding so ill make this video short and quick)
+
+--------------------------------------------------------------------------------
+
+your project’s title;				        	simple minigames
+your name; 						                yi kang
+your GitHub and edX usernames;		        	git-testtesttest00 // edx-testtesttest_0
+your city and country;					        singapore // singapore
+and, the date you have recorded this video.		30 june 2024
+
+--------------------------------------------------------------------------------

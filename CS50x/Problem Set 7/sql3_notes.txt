@@ -1,0 +1,374 @@
+vvv To make a SQL file of {FILENAME}, containing a table of {tablename}, using a source file of {SRCFILE.csv}
+
+sqlite3 {FILENAME.db}
+sqlite> .mode csv
+sqlite> .import {SRCFILE.csv} {tablename}
+sqlite> .quit
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To view what tables are in {FILENAME.db}
+
+sqlite3 {FILENAME.db}
+sqlite> .tables
+tablename1 tablename2
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To view what the schema is for all tables in {FILENAME.db}
+sqlite> .schema
+CREATE TABLE IF NOT EXISTS "{tablename}"(
+    content1 contenttype
+    content2 contenttype
+    ...
+)
+
+*note: if {FILENAME.db} has {tablename1} and {tablename2} and only schema for {tablename1} is needed, do .schema {tablename1}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To print {content1}, {content2} in table of {tablename} (default .mode table)
+
+sqlite> SELECT {content1}, {content2} FROM {tablename};
++----------+----------+
+| content1 | content2 |
++----------+----------+
+|    ...   |    ...   |
+|    ...   |    ...   |
++----------+----------+
+
+*note: placing wildcard symbol, *, will print all columns in {tablename}
+*note: requires ; to end query, pressing enter without it just adds a newline to query (...> {query})
+*note: query keywords e.g. CREATE is not case-sensitive, whereas variable names e.g. tablename is case-sensitive
+*note: queries are not space-specific
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To print {content1} in a table of {tablename}, limited to {2} rows of data, in {box} mode
+
+sqlite> .mode box
+sqlite> SELECT {content1} FROM {tablename} LIMIT {2};
+┌──────────┐
+| content1 |
+├──────────┤
+|   data1  |
+|   data2  |
+└──────────┘
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To print the count of {content1}
+
+sqlite> SELECT COUNT({content1}) FROM {tablename};
++-----------------+
+| COUNT(content1) |
++-----------------+
+|       132       |
++-----------------+
+
+*note: COUNT(*) can be used to count the total number of rows in {tablename}
+*note: since COUNT(*) is 1 row, SELECT {content1}, COUNT(*) fromt {tablename}, prints only 1 row from {content1} although there are 132 entries
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To print the distint data inputs in {content1}
+
+sqlite> SELECT DISTINCT({content1}) FROM {tablename};
++--------------------+
+| DISTINCT(content1) |
++--------------------+
+|        data1       |
+|        data2       |
+|        data3       |
+|        data4       |
++--------------------+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To narrow queries with conditions
+
+sqlite> SELECT COUNT(*) WHERE {content1} = {data3} AND {content2} = {data2}
++----------+
+| COUNT(*) |
++----------+
+|    12    |
++----------+
+
+*note: use AND for multiple conditions in WHERE
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To print the distint data inputs in {content1} and their counts
+
+sqlite> SELECT {content1}, COUNT(*) FROM {tablename} GROUP BY {content1};
++----------+----------+
+| content1 | COUNT(*) |
++----------+----------+
+|   data1  |    38    |
+|   data2  |    12    |
+|   data3  |    56    |
+|   data4  |    26    |
++----------+----------+
+
+*note: GROUP BY prevents {content1} column from repeating {data1} if multiple rows at the top have repeat entries while keeping COUNT(*) unchanged
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To print the distint data inputs in {content1} and their counts in ascending order of counts
+
+sqlite> SELECT {content1}, COUNT(*) FROM {tablename} GROUP BY {content1} ORDER BY COUNT(*);
++----------+----------+
+| content1 | COUNT(*) |
++----------+----------+
+|   data2  |    12    |
+|   data4  |    26    |
+|   data1  |    38    |
+|   data3  |    56    |
++----------+----------+
+
+*note: ORDER BY defaults to ascending (ORDER BY COUNT(*) ASC), for descending use ORDER BY COUNT(*) DESC
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To give aliases to table elements
+
+sqlite> SELECT {content1}, COUNT(*) AS n FROM {tablename} GROUP BY {content1} ORDER BY n;
++----------+----+
+| content1 |  n |
++----------+----+
+|   data2  | 12 |
+|   data4  | 26 |
+|   data1  | 38 |
+|   data3  | 56 |
++----------+----+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To insert {data1} into {content1} from {tablename}
+
+sqlite> INSERT INTO {tablename} ({content1}) VALUES('{data1}');
+sqlite> SELECT * FROM {tablename};
++----------+----------+
+| content1 | content2 |
++----------+----------+
+|    ...   |    ...   |
+|   data1  |   NULL   |
++----------+----------+
+
+*note: if asymmetric values are inserted, NULL (absence of value) is placed into the other columns
+*note: if a primary key exists and no value is given, an incremented value from the last entry is automatically given
+*note: if a column should automatically increment upon insertion of new rows, at CREATE, do {content} {content_type} NOT NULL AUTO_INCREMENT
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To delete rows where a condition is met
+
+sqlite> DELETE FROM {tablename} WHERE {content2} IS {NULL};
+sqlite> SELECT * FROM {tablename};
++----------+----------+
+| content1 | content2 |
++----------+----------+
+|    ...   |    ...   |
++----------+----------+
+
+*note: is dangerous and can delete whole table if not used properly
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv To update rows where condition is met
+
+sqlite> UPDATE {tablename} SET {content1} = {data1}, {content2} = {data1} WHERE {content2} IS {NULL};
+sqlite> SELECT * FROM {tablename};
++----------+----------+
+| content1 | content2 |
++----------+----------+
+|    ...   |    ...   |
+|   data1  |   data1  |
++----------+----------+
+
+*note: is dangerous and can replace the whole table if not used properly
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv Linking multiple tables together
+
+CREATE TABLE tablename1 (
+    id INTEGER              // INTEGER > int
+    dataA REAL              // REAL    > double
+    dataB NUMERIC           // NUMERIC > int or double (priority int, can be used for dates, times etc.)
+    dataC TEXT              // TEXT    > string
+    PRIMARY KEY(id)
+)
+
+CREATE TABLE tablename2 (
+    ref_id INTEGER NOT NULL // Prevents NULL value here
+    dataD BLOB              // Blob is a binary large-object
+    dataE REAL UNIQUE       // Prevents non-unique entries
+    dataF TEXT NOT NULL
+    FOREIGN KEY ref_id REFERENCES tablename1(id)
+)
+
+*note: a table could refer to multiple foreign keys
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv Retrieving data from linked table using nested queries
+
+sqlite> SELECT dataA FROM tablename1 WHERE id IN (SELECT ref_id FROM tablename2 WHERE dataE = 'data1');
++-------+
+| dataA |
++-------+
+|  ...  |
+|  ...  |
++-------+
+
+*note: for conditionals, A = B compares single values to single values, A IN B compares single values to list values
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv Retrieving data from linked table using JOIN
+
+sqlite> SELECT * FROM tablename1;
++----+-------+-------+-------+
+| id | dataA | dataB | dataC |
++----+-------+-------+-------+
+| 04 | data2 | data1 | data3 |
+| 01 | data2 | data2 | data1 |
+| 36 | data2 | data3 | data3 |
+| 18 | data1 | data3 | data1 |
++----+-------+-------+-------+
+sqlite> SELECT * FROM tablename2;
++--------+-------+-------+-------+
+| ref_id | dataD | dataE | dataF |
++--------+-------+-------+-------+
+|   01   | data3 | data1 | data1 |
+|   06   | data2 | data3 | data3 |
+|   18   | data1 | data1 | data1 |
+|   36   | data2 | data2 | data3 |
++--------+-------+-------+-------+
+sqlite> SELECT * FROM tablename1 JOIN tablename2 ON tablename1.id = tablename2.ref_id;
++----+-------+-------+-------+--------+-------+-------+-------+
+| id | dataA | dataB | dataC | ref_id | dataD | dataE | dataF |
++----+-------+-------+-------+--------+-------+-------+-------+
+| 01 | data2 | data2 | data1 |   01   | data3 | data1 | data1 |
+| 36 | data2 | data3 | data3 |   36   | data2 | data2 | data3 |
+| 18 | data1 | data3 | data1 |   18   | data1 | data1 | data1 |
++----+-------+-------+-------+--------+-------+-------+-------+
+sqlite> SELECT id, dataA, dataF FROM tablename1 JOIN tablename2 ON tablename1.id = tablename2.ref_id WHERE dataE = 'data1';
++----+-------+-------+
+| id | dataA | dataF |
++----+-------+-------+
+| 01 | data2 | data1 |
+| 18 | data1 | data1 |
++----+-------+-------+
+
+*note: JOIN can be used on multiple tables for example with many-to-many data where 2 tables track data, with 1 bridging table keeping correlation
+*note: since id in tablename1 and ref_id in tablename2 have unique names, id = ref_id is sufficient (otherwise e.g. tablename1.id = tablename2.id)
+*note: think of multiple tables getting stiched together, and then selecting from the one big table
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv Retrieving data from linked table using FROM
+
+sqlite> SELECT id, dataA, dataF FROM tablename1, tablename2 WHERE tablename1.id = tablename2.ref_id;
++----+-------+-------+
+| id | dataA | dataF |
++----+-------+-------+
+| 01 | data2 | data1 |
+| 36 | data2 | data3 |
+| 18 | data1 | data1 |
++----+-------+-------+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv Speeding up queries with CREATE INDEX
+
+sqlite> .schema
+CREATE TABLE tablename1(
+    content1 type
+    content2 type
+)
+sqlite> .timer ON
+sqlite> SELECT content1 FROM tablename1;
++----------+
+| content1 |
++----------+
+|    ...   |
+|    ...   |
++----------+
+Runtime: real 0.049 user 0.04715 sys 0.000883
+sqlite> CREATE INDEX indexname ON tablename1 (content1);
+Runtime: real 0.433 user 0.322106 sys 0.076283
+sqlite> SELECT content1 FROM tablename1;
++----------+
+| content1 |
++----------+
+|    ...   |
+|    ...   |
++----------+
+Runtime: real 0.000 user 0.000113 sys 0.000107
+
+*note: PRIMARY KEY is automatically indexed, but not FOREIGN KEYs
+*note: multiple indexes can be created but that uses more memory which could slow things if used carelessly
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv Integrating Python with SQLite3
+
+sqlite3 filename.db
+sqlite> .mode csv
+sqlite> .import srcfile.csv tablename
+sqlite> SELECT * FROM tablename
++----------+----------+----------+----------+----------+
+| content1 | content2 | content3 | content4 | content5 |
++----------+----------+----------+----------+----------+
+|   data1  |   data1  |   data2  |   data1  |   data3  |
+|   ...    |   ...    |   ...    |   ...    |   ...    |
++----------+----------+----------+----------+----------+
+sqlite> .quit
+
+file.py
+___
+from cs50 import SQL
+
+database_obj = SQL("sqlite:///filename.db")
+
+condition = input("Search for: ").strip()
+table_obj = database_obj.execute("SELECT * FROM tablename WHERE content1 = ?", condition)
+
+print(table_obj[0])
+print(table_obj[0]["content1"])
+___
+> (data1, data1, data2, data1, data3)
+> data1
+
+*note: each row of the .db file is stored as an interable in python's table_obj
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv Preventing race conditions
+
+file.py
+___
+database_obj.execute("BEGIN TRANSACTION")
+rows = database_obj.execute("SELECT * FROM tablename WHERE content1 = data1")
+value = rows[0]["content3"]
+
+database_obj.execute("UPDATE tablename SET content3 = ? WHERE content1 = ?", value+1, data1)
+database_obj.execute("COMMIT")
+___
+// When {2} transactions occur data2 + {2} = data4
+
+sqlite3 filename.db
+sqlite> SELECT * FROM tablename
++----------+----------+----------+----------+----------+
+| content1 | content2 | content3 | content4 | content5 |
++----------+----------+----------+----------+----------+
+|   data1  |   data1  |   data4  |   data1  |   data3  |
+|   ...    |   ...    |   ...    |   ...    |   ...    |
++----------+----------+----------+----------+----------+
+
+// Prevents race condition where original data was taken multiple times, even though a first transaction was occcuring but is not committed
+// i.e. content3 = data2 for both transactions, only updates to data3 at the end even after 2 transactions occur
+// Hence the addition of commands "BEGIN TRANSACTION" and "COMMIT"
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+vvv SQL injections
+
+file.py
+___
+rows = database_obj.execute("SELECT * FROM tablename WHERE content1 = ? and content2 = ?", input1, input2)    # Safe
+rows = database_obj.execute(f"SELECT * FROM tablename WHERE content1 = '{input1}' and content2 = '{input2}'") # Unsafe as seen below
+
+input1 = data1'--
+rows = database_obj.execute(f"SELECT * FROM tablename WHERE content1 = 'data1'--' and content2 = '{input2}'") # -- ignores rest of query
+rows = database_obj.execute(f"SELECT * FROM tablename WHERE content1 = 'data1'")                              # Execute checks only one condition
+
+rows = database_obj.execute(f"SELECT * FROM tablename WHERE content1 = 'data1''--' and content2 = '{input2}'")
+# ' is an escape character, '' means string(data'--) and ' in string is a literal ' and no longer closes condition
+# The python library has to handle ' inputs properly to prevent SQL injections
+
+--------------------------------------------------------------------------------------------------------------------------------------------------

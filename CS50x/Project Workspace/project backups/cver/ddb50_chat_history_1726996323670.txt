@@ -1,0 +1,43 @@
+user: i saw this on stack overflow:
+const char* getfield(char* line, int num)
+{
+    const char* tok;
+    for (tok = strtok(line, ";");
+            tok && *tok;
+            tok = strtok(NULL, ";\n"))
+    {
+        if (!--num)
+            return tok;
+    }
+    return NULL;
+}
+what does tok && *tok mean in the for loop and what is !--num in the if condition?
+
+assistant: Great questions! Let's break it down:
+
+1. **`tok && *tok` in the for loop:**
+   - `tok` is a pointer to a character. The expression `tok && *tok` checks two conditions:
+     - `tok` is not `NULL` (i.e., `tok` points to a valid memory location).
+     - `*tok` is not the null character `'\0'` (i.e., `tok` points to a non-empty string).
+
+2. **`!--num` in the if condition:**
+   - `--num` decrements `num` by 1.
+   - The `!` operator negates the result. So, `!--num` is true when `num` becomes 0 after the decrement.
+
+Does that help clarify things?
+
+user: so to confirm, tok will return true if it points to anything but NULL, and *tok will return true if it is any character other than \0, the && of both will check if any is false.
+
+can i write !num-- (i have seen num-- as a line in code before), or must it be --num since it is in a conditional?
+
+assistant: Yes, your understanding of `tok && *tok` is correct!
+
+Regarding `!--num` vs. `!num--`:
+- `!--num` decrements `num` first and then checks if it is zero.
+- `!num--` would check if `num` is zero before decrementing it.
+
+In this context, you need `!--num` to ensure the decrement happens before the check.
+
+user: i see. thanks for the explanation!
+
+assistant: You're welcome! If you have any more questions, feel free to ask.

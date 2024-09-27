@@ -1,0 +1,9 @@
+player 1,135
+"player,1",159
+player 2,9
+player 3,129
+player 4,89
+player 5,47
+player 6,83
+player 7,103
+player 8,104

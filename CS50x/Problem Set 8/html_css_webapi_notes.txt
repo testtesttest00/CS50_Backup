@@ -1,0 +1,637 @@
+╿  ╿ ╾┬╼ ╭─╮╭─╮ ╿
+├╼╾┤  │  │ ╰╯ │ │
+╽  ╽  ╽  ╽    ╽ └─╼
+
+referenced from: https://developer.mozilla.org/en-US/docs/Web/HTML
+
+*Non-exhaustive list of HTML tags, nesting level, allowed attributes, and their uses:
+______________________________________________________________________________________________________________________________________
+
+terminology: <h1 class="testclass">  TEST_PAGE  <   /h1   >                 h1 > tag_name
+                 |---attribute---|  |-content-| |-end_tag-|              class > attribute_name
+             |-----start_tag-----|                                 "testclass" > attribute_value
+             |-------------------element------------------|
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+format: <start_tag                                                - elaboration of element
+                   _attributes_list[specific_attribute]           - included attributed_list[relevant_attribute_from_list]
+                   attributes = "generic"[or "specific"] or bool  - value_type[or "relevant_specific_value"] (bool needs no value)
+                   >[</end_tag>]                                   - elements with contents: </end_tag> | no contents: .../>
+                                                                     ╚ container tags                     ╚ non-container / void tags
+
+---------------------------------------------------------------------------------------------------------------------------------0----
+
+<!DOCTYPE html> - header for every html file
+
+---------------------------------------------------------------------------------------------------------------------------------0----
+
+<html                                   - root (like main) of html file, root element containing other elements, only one per document
+      _global_attributes[lang="en"...]  - establish language of html
+      ...></html>                       - contains one <head> and one <body>
+
+////-----------------------------------------------------------------------------------------------------------------------------1----
+
+    <head                     - metadata of html file, will not be displayed on page, only one per html
+          _global_attributes
+          ...></head>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <meta                                                     - establishing other sorts of metadata
+               _global_attributes
+               charset = ["utf-8"], ...                           - establish character encoding aka permitted characters
+               content = "value"                                  - used to pair with a name/http-equiv attribute as seen below
+               http-equiv = "http_equiv_name" content = "value"   - select from a type of http-equiv, set value
+               name = "standard_metadata_name" content = "value"  - select from a type of name, set value
+               .../>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <link                        - links document to external resources
+              _global_attributes
+              href = "link_address"  - source address
+              rel = ["stylesheet"]   - relationshop of external source to document
+              .../>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <title>           - header of tab, title of browser window, only texts, no tags (i.e. no elements inside)
+                </title>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <script                               - embed executable code or data (javascript, webgl, json etc.)
+                 _global_attributes
+                 src = "source_name_address"  - source address
+                 ...></script>                - *language format: function func_name(arguments){executable;}
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <style                    - contains style information (css)
+               _global_attributes
+               ...></style>      - *language format: tag_name/#class {css_adjective: css_value;}
+
+////-----------------------------------------------------------------------------------------------------------------------------1----
+
+    <body                           - contents of html file, will be displayed on page, only one per html
+          _global_attributes
+          _event_handler_attributes
+          ...></body>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <br                    - creates a line break
+            _global_attributes
+            />
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <wbr                    - creates a word break opportunity for the browser to break line when it normally would not
+             _global_attributes
+             />
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <hr                    - creates a horizontol rule/line to break between two paragraphs
+            _global_attributes
+            />
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <input                             - creates interatactive controls to accept data from user
+               _global_attributes["title"] - title's value can be used to show a tooltip on hover
+               _global_attributes["id"...] - unique id from other <input> for <label>'s for attribute to link to
+
+               type = ["text"]  - determines input data type (e.g. text, number, button, date, email, radio)
+               max              - maximum value for integer type inputs
+               min              - minimum value for integer type inputs
+               maxlength        - maximum length for string type inputs
+               minlength        - minimum length for string type inputs
+               pattern          - matches input for string type inputs to a regular expression
+               placeholder      - shows temporary overwritable placeholder value on string type inputs to hint input data type
+               autocomplete     - automatically completes string type inputs based on previous entries from user
+               disabled bool    - stops input field from clicking or interaction
+               required bool    - indicates if a field must be filled out before submission
+               form = "form_id" - associates <input> to <form>
+               list = "list_id" - associates <input> to <datalist>
+               name             - key of an input, submitted to form data as a key-value pair
+               value            - input value for fields with predetermined inputs (type = "checkbox", "radio", "hidden")
+
+               type = "file" accept      - establish accepted filetypes
+               type = "image" src        - source address
+               type = "image" alt        - alternative text for accessibility and if source image does not load
+               type = "radio" checked    - indicates selection is checked
+               type = "radio" name       - groups a set of radio checkboxes with the same name where only one can be checked
+               type = "checkbox" checked - sets selection's default as checked
+               .../>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <img                    - embed image documents
+             _global_attributes
+             src                - source address
+             alt                - text shown if image cannot load and read for accessibility purposes
+             height             - intrinsic height of image
+             width              - intrinsic width of image, used with height to reserve space on page to prevent layout shift
+             .../>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <source                    - embed media documents in <audio>, <video> & <picture> tags to provide alternate source formats
+                _global_attributes
+                src                - source address
+                type               - specifies media type
+                .../>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <col                    - defines a span of columns within a <colgroup> element
+             _global_attributes
+             span = ["1"]       - the number of columns in the element
+             /col>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <audio                   - embed sound documents
+              _global_attributes
+              src                - source address
+              autoplay bool      - if specified starts playing when possible even if not fully downloaded
+              controls bool      - if specified gives user a playback controls
+              controlslist       - excludes some controls shown if controls attribute is present
+              loop bool          - if specified automatically loops after playback reaches the end
+              muted bool         - if specified playback is initially muted
+              ...></audio>       - fallback content if src not supported
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <video                              - embed video documents
+               _global_attributes
+               src                          - source address
+               poster                       - source address for image used when video is not played/downloaded
+               autoplay bool                - if specified starts playing when possible even if not fully downloaded
+               controls bool                - if specified gives user a playback controls
+               controlslist                 - excludes some controls shown if controls attribute is present
+               disablepictureinpicture bool - prevenets picture-in-picture
+               disableremoteplayback bool   - prevents video from playing when viewed on wired or wireless device
+               loop bool                    - if specified automatically loops after playback reaches the end
+               muted bool                   - if specified playback is initially muted
+               height                       - intrinsic height of video
+               width                        - intrinsic width of video
+               ...></video>                 - fallback content if src not supported
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <a                                                              - creates hyperlinks to external / internal resources
+           _global_attributes
+           href = ["ref_type:ref_address","#element_id", "/child_page"] - source address
+           rel                                                          - relationship of URL to document
+           target = ["_self"]                                           - establishes where the linked contents are displayed
+           ...></a>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <embed                    - to embed external content
+               _global_attributes
+               src                - source address
+               type               - MIME type of embedded content
+               height             - integer height of embed element
+               width              - integer width of embed element
+               ></embed>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <form                              - creates section containing interative controls to fill out and submit data
+              _global_attributes
+              autocomplete = ["on", "off"] - indicates if an input value can be automatically filled up by the browser
+              name                         - name of the form, must be unique from other <form> names
+              rel                          - controls what links the form creates
+              action                       - URL where the form data is sent to for processing
+              method = ["post", "get"]     - how form data sends ("post" sends request body, "get" appends URL and returns results)
+              taget = ["_self"]            - establishes where the response to the form is displayed
+              ...></form>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <fieldset                    - groups input controls and their labels within a <form>
+                  _global_attributes
+                  disabled bool      - prevents element from clicking or interaction
+                  form = "form_id"   - associates <fieldset> to <form> (nested <input> elements must have this too)
+                  name               - name associated to the group and does not have to be same as its <legend>
+                  ...></fieldset>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <button                           - creates interactable, clickable button on page
+                _global_attributes
+                _event_handler_attributes
+                autofocus bool            - if specified gives element input focus upon loading of page
+                disabled bool             - if specified disables presses and focus
+                form = "form_id"          - associates <button> to <form>
+                formaction                - overrides associated <form>'s action attribute value
+                formmethod                - overrides associated <form>'s method attribute value
+                name                      - key of button, submitted to form data as key-value pair
+                value                     - value of button, submitted to form data as key-value pair
+                type                      - establishes the function of the button element
+                ...></button>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <option                    - defines an item in a list of <datalist>, <select> or <optgroup>
+                _global_attributes
+                disabled bool      - if specified prevents user interaction and clicking
+                selected bool      - if specified is selected initially
+                label              - value of which is shown to user if there is no element content
+                value              - value of which is submitted to form data as a key-value pair
+                ></option>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <datalist                             - stores a list of values used in a drop-down selection for <input>
+                  _global_attributes["id"...] - a unique id for <input> list attribute to associate with
+                  ></datalist>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <select
+                _global_attributes
+                autocomplete       - indicates if browser should autocomplete for the user
+                autofocus bool     - if specified element will be initially focused
+                disabled bool      - if specified prevents user interaction and clicking
+                multiple bool      - if specified allows selection of multiple <option>
+                required bool      - if specified must have at least one selected <option>
+                form = "form_id"   - associates <select> to <form>
+                name               - key of select, submitted to form data as a key-value pair
+                ...></select>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <textarea                    - creates interactive control for a sizeable free-form text input
+                  _global_attributes
+                  autocapitalize     - determines if autocapitalization is on and if so, in what manner
+                  autocomplete       - overrides the associated <form>'s autocomplete value
+                  autofocus bool     - if specified automatically focuses onto element when page loads
+                  disabled bool      - prevents element from clicking or interaction
+                  cols = ["20"]      - width of input area by character count
+                  rows = ["2"]       - height of input area for visible text rows
+                  form = "form_id"   - associates <textarea> to <form>
+                  ...></textarea>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <label                    - represents a caption for an item on the user interface
+               _global_attributes
+               for = "id_value"   - associates <label> contents to element with id = "id_value", not needed if element is nested here
+               ...></label>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <blockquote                    - encloses quotes
+                    _global_attributes
+                    cite               - URL of referenced source
+                    ></blockquote>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <del                    - to wrap deleted texts that are outdated or wrong
+             _global_attributes
+             cite               - URL of referenced source giving reason of change
+             datetime           - valid date-time format indicating time of change
+             ></del>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <ins                    - to wrap inserted texts that are updated
+             _global_attributes
+             cite               - URL of referenced source giving reason of change
+             datetime           - valid date-time format indicating time of change
+             ></ins>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <li                    - represents an element of a list, nested within <ol>, <ul> or <menu>
+            _global_attributes
+            value              - the value of is the order in an ordered list <ol>
+            ></li>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <ol                    - represents a list of <li> elements with ordering
+            _global_attributes
+            reversed bool      - if specified reverses the way the list is ordered
+            start              - the starting integer number of the list
+            type=["1"]         - the type of ordering (numberic, roman or alphabetic)
+            ></ol>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <th                                 - wraps text that is the header of a row/column of a table
+            _global_attributes["id"...]     - used to associate headers to cells
+            colspan = ["1"]                 - the number of columns this cell will occupy
+            rowspan = ["1"]                 - the number of rows this cell will occupy
+            headers = "row_th_id col_th_id" - associates this cell to the header providing its headings
+            scope = ["row", "column"]       - defines which relative cells are related to the header
+            abbr                            - an abbreviated description of the header
+            ></th>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <td                                 - wraps text that is the raw data within a cell of a table
+            _global_attributes
+            colspan = ["1"]                 - the number of columns this cell will occupy
+            rowspan = ["1"]                 - the number of rows this cell will occupy
+            headers = "row_th_id col_th_id" - associates this cell to the header providing its headings
+            ></td>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <colgroup                    - defines a group of columns on a table
+                  _global_attributes
+                  span = ["1"]       - the number of columns in the group, if no <col> elements are already nested
+                  ></colgroup>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+
+        <data                    - contains back-end value to the wrapped content
+              _global_attributes
+              value              - the machine-readable translation of the content
+              ></data>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <time                    - contains back-end value to the wrapped date/time content
+              _global_attributes
+              datetime           - the converted date-time format corresponding to a list of valid formats
+              ></time>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+        <bdo                           - overrides current text directionality
+             _global_attributes
+             direction = ["ltr","rtl"] - establishes which direction the sentence starts printing each individual character from
+             ></bdo>
+
+////////-------------------------------------------------------------------------------------------------------------------------2----
+
+*List of container tags with only _global_attributes
+
+        <header></header>   - to wrap introductory content at the top of the page
+        <h1-h6></h1-h6>     - to wrap block level section headers in the middle of the page
+        <hgroup></hgroup>   - to wrap a section header <h1-h6> with one or more related content <p>
+        <footer></footer>   - to wrap extra content at the bottom of the page
+        <p></p>             - to wrap text on a block level, grouped within blank lines, closed upon parsing other blocks
+        <main></main>       - to wrap content within the main section of the <body>
+        <aside></aside>     - to wrap content indirectly related to main content/flow
+        <section></section> - to wrap content in a generic section
+        <div></div>         - to wrap content on a block level to group for css styling or adding attributes for metadata
+        <span></span>       - to wrap text on an in-line level to group for css styling or adding attributes for metadata
+        <b></b>             - to wrap bolded text to draw attention, without indicating importantance
+        <strong></strong>   - to wrap bolded text to draw attention, while raising its level of importance
+        <em></em>           - to wrap italicized text to convey mood of sentence
+        <i></i>             - to wrap italicized text for texts with different semantic meaning than its sentence
+        <cite></cite>       - to wrap italicized text that are titles of cited work
+        <mark></mark>       - to wrap highlighted text that has special interest and relevancy but is not important
+        <u></u>             - to wrap underlined content for a non-textual reason (i.e. not for emphasizing the selection)
+        <dl></dl>           - to wrap <dt> & <dd> to form a description list
+        <dt></dt>           - to wrap text to form a description term on top of a <dd>
+        <dd></dd>           - to wrap text to form description details below a <dt>
+        <ul></ul>           - to wrap text within <li> elements to form an unordered list
+        <menu></menu>       - to wrap interactables within <li> elements to form an unordered list
+        <nav></nav>         - to wrap links within <li> elements in <ul> or <ol> to form a navigation bar
+        <address></address> - to wrap contact information
+        <article></article> - to wrap articles, blogs, forums etc.
+        <code></code>       - to wrap text indicating a sample of computer code
+        <samp></samp>       - to wrap text indicating a sample of computer output
+        <var></var>         - to wrap text indicating a mathematical variable
+        <kbd></kbd>         - to wrap text indicating keyboard strokes
+        <picture></picture> - to wrap one <img> as fallback and zero or more <source> as image source options
+        <table></table>     - to wrap table section elements <caption>, <colgorup>, <thead>, <tbody>, <tfoot> of a table element
+        <caption></caption> - to wrap text used as the title of the table
+        <thead></thead>     - to wrap table row <tr> creating rows of table headers <th> with scope column
+        <tbody></tbody>     - to wrap table row <tr> creating rows with table header <th> with scope row and table data <td>
+        <tfoot></tfoot>     - to wrap table row <tr> creating rows with table header <th> with scope row and summarised data <td>
+        <tr></tr>           - to wrap table headers <th> or table data <td> to form a single row within the parent <table>
+        <legend></legend>   - to wrap text used as parent <fieldset>'s caption
+
+
+*Attributes within _global_attributes with special meaning:
+
+        <abbr                           - to wrap abbreviated words
+              _global_attributes[title] - value is shown as a tooltip on hover
+              ></abbr>
+        <dfn                           - to wrap italicized content to definine
+             _global_attributes[title] - value is substituted as content so no content has to be wrapped
+             ></dfn>
+        <bdi                         - to isolate a span of text to allow it to have its own directionality
+             _global_attributes[dir] - defaults to "auto" unless a direction is specified
+             ></bdi>
+--------------------------------------------------------------------------------------------------------------------------------------
+
+0*/ tags : starting of a html document
+1*/ tags : separateion of unviewable metadata and viewable content
+2*/ tags : can wrap other 2*/ tags as needed to create contained sections for referencing, especially for css styling & scripting
+--------------------------------------------------------------------------------------------------------------------------------------
+
+_global_attributes:
+
+id                 - a unique identifier when linking (fragment identifier), css styling or scripting
+class              - the value of which is associated with during css styling and scripting
+title              - advisory information related to the element
+autocaptitalize    - controls whether inputted text will be automatically captalized, and in what manner
+autofocus bool     - if specified element will automatically be focues on page load
+lang               - defines the language of an element
+dir                - "ltr", "rtl" or "auto" defines the directionality of the element's texts
+style              - contains css styling declarations, values format: "css_adjective: css_value"
+                     *(inline style takes precedence over style in <head>)
+...
+
+
+_event_handler_attributes:
+
+onclick
+onfocus
+
+...
+
+______________________________________________________________________________________________________________________________________
+
+╭──╼ ╭──╼ ╭──╼
+│    ╰╼╾╮ ╰╼╾╮
+╰──╼ ╾──╯ ╾──╯
+
+referenced from: https://developer.mozilla.org/en-US/docs/Web/CSS
+
+______________________________________________________________________________________________________________________________________
+
+terminology: h1  {
+                  color: red;        color > property
+                 }                     red > property_value
+     |-selector-||-declaration-|
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+selectors:
+
+                                                          selector : selector_example
+element selector (selects the element specified)                   : h1            {}
+multi-selection (selects all the elements specified)               : h1, h2, h3    {}
+id selector (selects the element with the unique id)               : #unique_id    {}
+class selector (selects all elements with specified class)         : .testclass    {}   (== attribute.selector [class ~= testclass])
+attribute selector (selects all elements with specified attribute) : img[src]      {}
+pseudo-class selector (selects the element in the specified state) : h1:hover      {}
+pseudo-element selector (selects the part of the element)          : h1::first-line{}               select all descendants ╗
+nesting selectors (selects the nested child)                       : h1{&:hover    {}}  (== h1{} h1:hover{}) (no &: h1{} h1*:hover{})
+
+...
+
+psuedo-class-selectors:
+:autofill
+:enabled
+:disabled
+:focus
+:hover
+:active
+
+...
+
+psuedo-element-selectors:
+::first-line
+::before
+::after
+
+...
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+declarations:
+
+                                           property : property_value
+font-size (change font size)                        : <length>
+font-family (change font type)                      : <string> (imported to html via link)
+content (replaces content with value)               : url(<string>) (url to source), <string>, <image>...
+
+padding (space around content)                      : <length>
+border (line around padding)                        : <length>, <line-style>, <color>
+margin (space around border)                        : <length>, <percentage>, "auto" - automatic length that centers element
+width (width of the element)                        : <length>
+
+background-color (color behind content and padding) : <color>
+color (color of the element)                        : <color>
+text_shadow (drop shadow of text in element)        : <length>, <color>
+display (display mode of element - inline, block)   : <string>
+
+...
+
+property_value_types:
+
+<color>: 0x-"#FFFFFF"(in RGB) || RGBA-"rgba(255, 255, 255, 1)"(in R, G, B, opacity) || Name-"black..." ...
+<line-style>: "none" || "dotted" || "solid" || "double" || "ridge" || "inset" || "outset"" ...
+<length>: "<number> em/px..." || "small/medium/large" (Number of Values: TopBottomLeftRight: 1-TBLR, 2-TB_LR, 3-T_B_LR, 4-T_B_L_R)
+<percentage>: 0%
+
+<integer>: "[+]/- 123"
+<number>: "[+]/- <integer>.<integer>"
+<string>: "this is a string" (escape value: \ for symbols & special character, e.g.\27 for ', \A for newline, values in hexadecimal)
+<image>: a 2d image, from <url>, from image() function ...
+<url>: resource pointer, == <url()> | <src()>
+
+functions(): returns a value to be property_value
+
+...
+______________________________________________________________________________________________________________________________________
+
+webapi
+referenced from: https://developer.mozilla.org/en-US/docs/Web/API/Event
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Document Object Model (DOM):
+
+interface hierachy:    (term: interface == object)
+
+EventTarget ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══  Event
+╚═ Node ══ Window                                               ╚═ UIEvent, TimeEvent, SubmitEvent, ErrorEvent...
+   ╚═ Element ══ HTMLDocument ══ Document                          ╚═ MouseEvent, TouchEvent...
+      ╚═ HTMLElement                                                  ╚═ click, dblclick ...
+         ╚═ HTMLMediaElement, HTMLBodyElement, HTMLBRElement...
+            ╚═ HTMLVideoElement, HTMLAudioElement...
+            (Each one represents an HTML element)
+            (HTMLBRElement for <br/> etc...)
+
+
+others:
+
+FormData
+CSS
+...
+
+*each interface has its interface variable and interface methods for languages e.g. JavaScript to use
+
+--------------------------------------------------------------------------------------------------------------------------------------
+_____
+interface EventTarget methods:                                  interface Event properties: methods:
+.dispatchEvent()                                                .currentTarget              .stopPropogation()
+.addEventListener()                                             .srcElement                 ...
+.removeEventListener()                                          .target
+                                                                ...
+_____
+interface Node properties: methods:                             interface Window properties: methods:    events:
+.baseURI                   .removeChild()                       .caches                      .close()    error
+.childNodes                .appendChild()                       .closed                      .focus()    resize
+.parentElement             ...                                  .document                    .resizeTo() focus
+...                                                             .name                        ...         load
+                                                                ...                                      ...
+_____
+interface Element properties: methods:  events:                 interface Document properties: methods:         events:
+.attributes                   .before() copy                    .activeElement                 .createElement() DOMContentLoaded
+.classList                    .after()  blur                    .body                          .hasFocus()      scroll
+.className                    ...       click                   .adoptedStyleSheets            ...              ...
+.firstElementChild                      ...                     ...
+...
+_____
+interface HTMLElement properties (global attributes on HTML document): methods: events:
+.lang                                                                  .click() error
+.title                                                                 .focus() load
+.style                                                                 ...      ...
+...
+
+_____(theory: void elements have less properties, methods & events?)
+interface HTMLBodyElement events (attributes on HTML document):
+.onpageshow
+.onunload
+...
+
+interface HTMLInputElement properties (attributes on HTML document): methods:         events:
+.disabled                                                            .checkValidity() invalid
+.minlength                                                           .select()        select
+.maxlength                                                           ...              ...
+...
+
+...
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+interface FormData methods:
+.append()
+.delete()
+.entries()
+.keys()
+.values()
+...
+
+interface CSS properties: methods:
+.highlights               .registerProperty()
+...                       .escape()
+                          ...
+
+...
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Element --> Event created (from user interaction or from script as part of a function)
+   ║       ╱
+   ║      ╱
+   .target
+
+______________________________________________________________________________________________________________________________________

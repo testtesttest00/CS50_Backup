@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    {% if symbol == 0 %}
+        Quote
+    {% else %}
+        {{ symbol }}
+    {% endif %}
+{% endblock %}
+
+
+{% block main %}
+    {% if symbol == 0 %}
+        <form action="/quote" method="post">
+            <div class="mb-3">
+                <input type="text" name="symbol" autofocus autocomplete="off" placeholder="Search for (e.g. AAPL)"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    {% else %}
+        <table class="table">
+            <caption>
+                data retrieved from: https://finance.cs50.io/quote?symbol={{ symbol }}
+            </caption>
+            <colgroup>
+                <col span="1">
+                <col span="1">
+            </colgroup>
+            <tr>
+                <th scope="row">
+                    Company
+                </th>
+                <td>
+                    {{ dict["name"] }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    Symbol
+                </th>
+                <td>
+                    {{ dict["symbol"] }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    Price (USD)
+                </th>
+                <td>
+                    {{ dict["price"] | usd }}
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+{% endblock %}

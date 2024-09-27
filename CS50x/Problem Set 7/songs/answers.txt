@@ -1,0 +1,7 @@
+On a 3D graph of axes energy, danceability and valence, I would determine the spot the listener occupies based on the averages of their songs.
+The graph would have two pre-determined moods at each points and the listener will take the moods from the nearest mood-point on the graph.
+
+A limitation to this approach is in the use of average, which could cause a listener who listens to songs with extreme differences in a characteristic
+(e.g. some songs that have very high energy and other songs with very low energy) to be wrongly classified as listening to songs with a middle value
+in that characteristic. A way to overcome this is to also check for variance in values and plot the listener on multiple points of the graph which
+returns multuple aura moods that can be joined together to give the prominent 2 moods.

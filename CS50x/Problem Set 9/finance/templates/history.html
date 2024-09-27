@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Balance</th>
+                <th scope="col">Buy + / Sell -</th>
+                <th scope="col">Time</th>
+            </tr>
+        </thead>
+        <tmain>
+            {% for dict in data %}
+                <tr>
+                    <td>{{ dict["symbol"] }}</td>
+                    <td>{{ dict["price"] | usd }}</td>
+                    <td>{{ dict["quantity"] }}</td>
+                    <td>{{ -dict["cost"] | usd }}</td>
+                    <td>{{ dict["direction"] }}</td>
+                    <td>{{ dict["time"] | unix }}</td>
+                </tr>
+            {% endfor %}
+        </tmain>
+    </table>
+{% endblock %}

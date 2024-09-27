@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Sell
+{% endblock %}
+
+
+{% block main %}
+    <div>
+        <form action="/sell" method="POST">
+            <select name="symbol" autofocus>
+                <option disabled selected style="color:#030303;">--Select Share--</option>
+                {% for option in options %}
+                    <option value="{{ option }}" label="{{option}}"></option>
+                {% endfor %}
+            </select>
+            <input type="number" min="1" name="shares" autocomplete="off" placeholder="Number of shares"/>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary" style="margin:1em;">Confirm Sale</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

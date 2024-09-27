@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- Use "html-server" in terminal to view html-->
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+        <script>
+            // Add code to check answers to questions
+            let green = "rgba(0,255,50,0.2)";
+            let red = "rgba(255,0,50,0.2)";
+
+            function checkmcq(e){
+                let button = event.target;
+
+                if (button.innerHTML == 2){
+                    button.style.backgroundColor = green;
+                    button.parentElement.querySelector('.feedback').innerHTML = 'Correct';
+                }
+                else{
+                    button.style.backgroundColor = red;
+                    button.parentElement.querySelector('.feedback').innerHTML = 'Incorrect';
+                }
+            }
+
+            function checkradio(e){
+                let button = event.target;
+                let radio = button.parentElement.querySelector('input[name="rad"]:checked').value;
+
+                button.parentElement.querySelector('.feedback').innerHTML = "Checking";
+                if (radio == "A"){
+                    button.parentElement.querySelector('.feedback').innerHTML = "Correct";
+                    button.parentElement.style.backgroundColor = green;
+                    button.parentElement.style.boxShadow = "inset -1000px 180px 800px rgba(255,255,255)";
+                    button.style.backgroundColor = "rgba(50,255,0,1)";
+                    button.style.border = "10mm ridge rgba(210, 220, 150, 1)";
+                }
+                else{
+                    button.parentElement.querySelector('.feedback').innerHTML = "Incorrect";
+                    button.parentElement.style.backgroundColor = red;
+                    button.parentElement.style.boxShadow = "inset -1000px 180px 800px rgba(255,255,255)";
+                    button.style.backgroundColor = "rgba(255,50,0,1)";
+                    button.style.border = "10mm ridge rgba(210, 220, 150, 1)";
+                }
+            }
+
+            function checklong(e){
+                let button = event.target;
+                let field = button.parentElement.querySelector('input[name="long"]').value;
+
+                if (field == "10000000000"){
+                    button.style.backgroundColor = green;
+                    button.style.border = "2rem double rgba(210, 220, 150, 1)";
+                    button.parentElement.querySelector('input[name="long"]').style.backgroundColor = green;
+                    button.parentElement.querySelector('input[name="long"]').style.boxShadow = "inset -1000px 180px 800px rgba(255,255,255)";
+                    button.parentElement.style.border = "20mm ridge rgba(50,255,0,1)";
+                }
+                else{
+                    button.style.backgroundColor = red;
+                    button.style.border = "2rem double rgba(210, 220, 150, 1)";
+                    button.parentElement.querySelector('input[name="long"]').style.backgroundColor = red;
+                    button.parentElement.querySelector('input[name="long"]').style.boxShadow = "inset -1000px 180px 800px rgba(255,255,255)";
+                    button.parentElement.style.border = "20mm ridge rgba(255,50,0,1)";
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <!-- Add multiple choice question here -->
+                 <h3>
+                    <legend>What is 1+1?</legend>
+                    <button type="button" name="choice 1" class="mcq" onclick=checkmcq(event)>1</button>
+                    <button type="button" name="choice 2" class="mcq" onclick=checkmcq(event)>2</button>
+                    <button type="button" name="choice 2" class="mcq" onclick=checkmcq(event)>3</button>
+                    <p class="feedback"></p>
+                    <fieldset>
+                        <legend>What is the first alphabet?</legend>
+                        <input type="radio" id="A" name="rad" class="rad" value="A"/>
+                        <label for="A">A</label>
+                        <br/>
+                        <input type="radio" id="B" name="rad" class="rad" value="B"/>
+                        <label for="B">B</label>
+                        <br/>
+                        <input type="radio" id="C" name="rad" class="rad" value="C"/>
+                        <label for="C">C</label>
+                        <br/>
+                        <br/>
+                        <button type="button" name="rad_submit" onclick=checkradio(event)>Check</button>
+                        <p for="button" class="feedback"></p>
+                    </fieldset>
+                 </h3>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <!-- Add free response question here -->
+                <legend for="long">
+                    What is 10^10?
+                </legend>
+                <input type="text" name="long" id="long" autocomplete="off"/>
+                <br/>
+                <br/>
+                <button type="button" for="long" onclick=checklong(event)>Check</button>
+            </div>
+        </div>
+    </body>
+</html>
