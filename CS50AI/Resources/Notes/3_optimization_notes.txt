@@ -1,0 +1,196 @@
+Optimization:
+    Choosing the best option
+
+Problems:
+    Local search
+    Linear programming
+    Constraint satisfaction
+
+Search - Look for solutions by traversing from start node to goal node (goal: find actions from start state to goal state)
+         (e.g. maze)
+Local search - Search algorithm that maintains a single node that is replaced by a better neighboring node (goal: find best state)
+               (e.g. facility location problem (e.g. location of hospitals to minimise distance (Manhattan heuristic) for everyone))
+               (e.g. travelling salesman problem (e.g. route with shortest path between all nodes forming a circuit))
+                     (cannot use regular search as it requires defining start and end node which may not be optimal)
+
+    State-space landscape - Bar chart for score/cost against possible states
+        Global maximum - Highest score/cost on the state-space landscape
+            Objective function - Finds and returns the global maximum (i.e. Highest score)
+        Global minimum - Lowest score/cost on the state-space landscape
+            Cost function - Finds and returns the global minimum (i.e. Lowest cost)
+        Current State - Current node
+        Neighbors - Defined differently depending on the problem. Generally close (less action) to current state
+        Local maxima - Peak on a state-scape landscape that is not a global maximum (as neighbors are less favorable)
+        Local minima - Trough on a state-scape landscape that is not a global minimum (as neighbors are less favorable)
+        Flat local maxima - Peak on a state-scape landscape where multiple neighbors have the same score making a plateau
+        Flat local minima - Trough on a state-scape landscape where multiple neighbors have the same score making a plateau
+        Shoulder - Plateau where multiple neighbors have the same score and a higher and lower neighbor on either side of the plateau
+
+    Method: Hill climbing (current will always improve)
+        Approach:
+        1 - Compare neighbors to replace current if they are better (higher score(objective function)/lower cost(cost function))
+        2 - Stop when all neighbors are less favorable
+
+        function HILL-CLIMBING(problem):
+            current = initial problem
+            loop:
+                if neighbor in neighbours better than current:
+                    current = neighbor
+                    continue
+                break
+            return current
+
+        Variants:
+            Steepest-ascent(/descent) - Highest(/lowest) value neighbor (Changes how neighbor is chosen)
+            Stochastic                - Random, more favourable neighbor (Changes how neighbor is chosen)
+            First-choice              - Chooses the neighbor found first (Changes how neighbor is chosen)
+            Local beam search         - Chooses multiple highest valued neighbor, running multiple searches (Changes search intensity)
+            Random-restart            - Hill climb multiple times, using a random initial state each time (Changes search persistance)
+
+    Method: Simulated annealing (current may improve or worsen, allowing the distancing from local maxima)
+        Approach:
+        1 - Set a "temperature" curve, where at higher temperature, there is a higher tolerance of choosing a worse neighbor
+        2 - At high temperature, choose neighbor if better, else permitting worse choices if it satisfies minimum tolarance
+        3 - Decrease temperature over iterations
+        4 - At low temperature, choose neighbor that is best choice (hill-climb)
+        5 - Stop when no worse choices are tolerated and no better choice are found
+
+        function SIMULATED-ANNEALING(problem):
+            current = initial state of problem
+            t = 0
+            loop:
+                T = temperature(t)
+                neighbor = random choice among all neighbors of current
+                Δx = neighbor - current
+                with probability, given e^(Δx/T), current = neighbor (much better neighbor, bigger Δx, higher probability, vice-versa)
+                else, if Δx > 0, current = neighbor
+            return current
+        * in lecture, function takes argument for maximum number of loops as a limit to stop
+
+Linear programming - Search algorithm that finds a solution to algebraic linear equations modelling cost/objective function
+
+    Construction of linear equations:
+        Cost/objective function = c1x2 + c2x2 + c3x3 + ..., coefficients c
+
+        Constraint = a1x1 + a2x2 + a3x3 + ... <= b, coefficients a, constant b (multiply by -1 throughout to stick to "<=" is needed)
+        or
+        Constraint = a1x1 + a2x2 + a3x3 + ... = b, coefficients a, constant b
+
+        Bounds = i <= xn <= j, constants i, j
+
+        e.g.
+        Minimise the cost of travelling from east to west:
+        Train: $1 / km
+        Car: $5 / km
+        Total distance: 10km
+
+        Maximum time: 30 min
+        Train: 5min / km
+        Car: 1min / km
+
+        Train runs up to the 8km mark
+
+
+        Cost function: T + 5C, where T and C are distance travelled on train and car respectively
+        Constraint 1: T + C = 10, since total distance travelled is 10km
+        Constraint 2: 5T + C <= 30, since maximum time travelling is 30min
+        Bound: 0 <= T <= 8, since maximum train distance is 8km
+
+    Algorithms (non-exhaustive):
+        Simplex
+        Interior-point
+    * in-depth mathematics, use existing libraries rather than code from scratch
+
+Constrait satisfaction - Find a domain of values to satisfy the list of variables' limits
+    Elements of a constratint satisfaction problem:
+        Set of variables                                                          (e.g. {x, y, z})
+        Set of domains (a domain is a set of values that a variable can take on)  (e.g. {x:{a, b}, y:{b}, z:{a, c}})
+        Set of constraints                                                        (e.g. {x!=y, x!=c. y!=a, y!=c, z!=b})
+            Hard constraints - Constrainst that must be satisfied in a correct solution
+            Soft constraints - Constraints express a preference of a solution over another
+
+    Constraint graph - Graph conisting of nodes and arcs(edges) defining relationships between variables
+        Node - Single variable with a list of potential values to take on
+        Arc - Line connecting two variables indicating a constraint between them
+        Unary constraint - Constraint within one variable/node (e.g. x < c, variable x, constant c)
+        Binary constraint - Constraint bewtween two variables/node (e.g. x != y, variables x and y)
+        Node consistency - When a variable has a domain of values satisfying all of its unary constraints
+        Arc consistency - When a variable has a domain of values satisfying all of its binary constraints
+                          (For arc X <-> Y, X is arc consistent when all values in X's domain leaves Y with a non-empty domain)
+
+        Checking for arc consistency:
+            function REVISED(problem, X, Y):
+                updated = False
+                for xvalue in X.domain:
+                    for yvalue in Y.domain:
+                        if no yvalue satisfies X <-> Y constraint, xvalue is not arc consistent
+                        remove xvalue from possible domain of X.domain
+                        updated = True
+                return updated
+
+            function AC-3(problem):
+                queue = list of all arcs (Xn <-> Yn) in problem
+                while queue not empty:
+                    arc = queue.pop(queue[0])
+                    if REVISED(arc):
+                        if X.domain is empty:
+                            return False (arc consistency not possible)
+                        for neighbor Z in X's neighbors, except for Y: (X <-> Y is consistent, at least one Y value satisfies Y <-> X)
+                            queue.append(arc = (Z <-> X))
+                            (X value removed may be the only one satisfying Z <-> X)
+                            (X <-> Z recheck not needed as for all value in X.domain, X <-> Z is satisfied on first check)
+                return True
+
+    Search algoritm for Constraint Satisfaction Problems:
+        Initial State - Empty assignment for all variables
+        Goal State - Assignment for every variable satisfying all comstraints, else no solution
+        Actions - Add {variable = value} to assignment
+        Transition Model - More assignments in assignment list
+        Path Cost - Iterations to add assignments
+
+    Backtracking search - Search algorithm optimisation for Constraint Satisfaction Problems by retrying from last state with options:
+
+        function BACKTRACK(assignment, problem):
+            if assignment complete:
+                return assignment
+            variable = SELECT_UNASSIGNED_VARIABLE(problem)
+            for value in variable.domain:
+                if pair = {variable = value} is consistent:
+                    add pair into assignment
+                    result = BACKTRACK(assignment, problem)
+                    if result = assignment:
+                        return assignment (pass back to first call of BACKTRACK)
+                    else: (result = fail)
+                        remove pair from assignment
+            return fail
+
+    Further optimsations:
+        Inference - use knowledge to infer variable = value pair and make more assignments at once
+            Maintain arc consistency - Recheck arc consitency after every assignment to remove inconsistent values
+                Call AC-3 on every arc neighbor Y to the newly assigned node X (Queue every Y <-> X)
+
+                function BACKTRACK(assignment, problem):
+                    if assignment complete:
+                        return assignment
+                    variable = SELECT_UNASSIGNED_VARIABLE(problem)
+                    for value in variable.domain:
+                        if pair = {variable = value} is consistent:
+                            add pair into assignment
+                            if inference := INFERENCE(assignment, problem) not None
+                            (e.g. AC-3 removing inconsistent values for neighbor, infered pair = {neighbor = consistent value})
+                                add inference into assignment
+                            result = BACKTRACK(assignment, problem)
+                            if result = assignment:
+                                return assignment (pass back to first call of BACKTRACK)
+                            else:
+                                remove pair from assignment
+                                if inference:
+                                    remove inference from assignment
+                    return fail
+
+        Method for SELECT_UNASSIGNED_VARIABLE:
+            Minimum remaining values heuristic - assign the next variable that has least possible values (quicker deduction)
+            Degree heuristic - assign the next variable that has the highest degree (number of arcs to other nodes)
+
+        Method to find variable.domain:
+            Least constraining value heuristic - variable list prioritises values that are ruled out for neighbors

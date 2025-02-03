@@ -1,0 +1,327 @@
+Learning:
+    Generate preferences from existing data
+
+Types of learning:
+    Supervised learning - Generate estimations for a criteria, given a data set with labels (i.e. evidence + known criteria)
+    Reinforcement learning - Giving preference to each conclusion to consider in future decision making
+    Unsupervised learning - Generate estimations for a criteria, given a data set without labels (i.e. evidence + unknown criteria)
+
+Supervised learning - Generate estimations for a criteria, given a data set with labels (i.e. evidence + known criteria)
+    Method: Hypothesize a function to link evidence input to criteria output
+    Tasks:
+        Classification - Learn function that maps input points to a discrete category
+            e.g.
+            Given existing data set with blood-sugar level, blood-insulin level and diabetes presence,
+            classify the given blood-sugar and blood-insulin levels to the presence of diabetes,
+            to estimate if future patients have diabetes
+
+            Algorithms:
+                k-nearest-neighbor classification - Compare new data input to k most similar data, classifying them together
+                    e.g.
+                    using arbitrary units:
+                    blood-sugar / blood-insulin / presence of diabetes (label)
+                         3              1                     1
+                         2              0                     1
+                         3              0                     1
+                         1              2                     0
+                         2              3                     0
+                         3              3                     0
+                         0              0                     0
+                         1              1                     1
+
+                    blood-sugar
+                        │
+                      3 ┤    1    1         0
+                        │
+                      2 ┤    1              0
+                        │
+                      1 ┤         1    0
+                        │
+                      0 ┤    0
+                        │
+                        └────┬────┬────┬────┬──── blood-insulin
+                             0    1    2    3
+
+
+                    Given new patient with blood-sugar: 0, blood-insulin: 1,
+
+                    blood-sugar
+                        │
+                      3 ┤    1    1         0
+                        │
+                      2 ┤    1              0
+                        │
+                      1 ┤         1    0
+                        │
+                      0 ┤    0    ?
+                        │
+                        └────┬────┬────┬────┬──── blood-insulin
+                             0    1    2    3
+
+                    If k = 3, nearest data points are
+                    blood-sugar / blood-insulin / presence of diabetes (label)
+                        0              0                     0
+                        1              1                     1
+                        1              2                     0
+
+                    Majority has no diabetes - classify new neighbor as no diabetes as well
+
+                Linear regression - Seperate classes by a linear classifier. Additional inputs are classified by which side it lies on
+                    e.g.
+                    Given existing data set on graph, with new patient to classify as '?'
+
+                    blood-sugar
+                        │
+                      3 ┤    1    1         0
+                        │
+                      2 ┤    1              0
+                        │
+                      1 ┤         1    0
+                        │
+                      0 ┤    0    ?
+                        │
+                        └────┬────┬────┬────┬──── blood-insulin
+                             0    1    2    3
+
+
+                    Draw a line to separate classes (blood-sugar: 1, blood-insulin:1, diabetes: 1 is taken to be an outlier)
+
+                    blood-sugar
+                        │
+                      3 ┤    1    1╱        0
+                        │         ╱
+                      2 ┤    1   ╱          0
+                        │       ╱
+                      1 ┤      ╱  1    0
+                        │     ╱
+                      0 ┤    ╱0   ?
+                        │
+                        └────┬────┬────┬────┬──── blood-insulin
+                             0    1    2    3
+
+                    Since '?' lies on the '0' side, classify new patient as no diabetes
+
+                    Perceptron - linear classifier (finds hyperplane, which is line in 2D space, plane in 3D space and so on):
+                        Theory:
+                            Given relationship, y = f(𝒙), where 𝒙 is a vector of inputs, y is an output that is linearly seperable
+                                Since y is linearly seperable,
+                                    y is a binary output
+                                    y can be determined if a threshold, θ, is crossed by 𝒙
+                                    y value will not change after θ is crossed
+
+                                To determine y from whether 𝒙 crosses θ,
+                                    Sum for each value, xn, in 𝒙,
+                                    z = c1x1 + c2x2 + c3x3 + ... + cnxn, where cn is a constant coefficient of xn
+
+                                    If z >= θ, y = 1
+                                    If z < θ, y = 0
+                                    Boundary between y = 0 and y = 1 is at line z = θ
+
+                                    Rearranging z = θ into z - θ = 0,
+                                    c1x1 + c2x2 + c3x3 + ... + cnxn - θ = 0
+                                    c0 + c1x1 + c2x2 + c3x3 + ... + cnxn = 0, where c0 = -θ
+
+                        Given that input x -> output y can be modelled by an unknown function f(x) = y, estimate function f:
+                            f(𝒙) ≈ h(𝒙) = H(𝐰'•𝒙')
+                            Unknown function, f(𝒙) = y
+                                𝒙 is a vector of real-valued inputs
+                                y is observed output (binary 0/1, since output is a classification)
+                            Hypothesis function, h(𝒙) ≈ y
+                            Heaviside-step function (activation function to output a binary value), H(𝐰•𝒙 + b) ≈ y
+                                𝐰 is a vector of real-valued weights
+                                b is a bias term
+                                Or
+                                Since b is a constant, take b = w0
+                                b + 𝐰•𝒙 = b*1 + w1*x1 + w1*x2 + ... + wn*xn + b*1
+                                        = w0*1 + w1*x1 + w1*x2 + ... + wn*xn + b*1
+                                        = [w0, w1, w2, ..., wn] · [1, x1, x2, ..., xn]
+                                        = 𝐰'•𝒙'
+                            Heaviside-step function (hypothesized function), H(𝐰'•𝒙') ≈ y
+                                 where H(𝐰'•𝒙') = 1 if 𝐰'•𝒙' >= 0 & 0 if 𝐰'•𝒙' < 0
+                            * Plot decision boundary using equation, 𝐰'•𝒙' = 0
+
+                            Summary:
+                                Get the summation value of each weighted input
+                                Pass summatiok value into an activation function to check threshold and get an output
+
+                        Perceptron learning rule (Weight update rule)
+                            Start learning by setting weights at a random value or at 0
+                            Until convergence, update each weight coefficient, wi, of each x value, xi (even for xi = 1 to get bias)
+                            wi = wi + r*(f(𝒙) - h(𝒙))*xi
+
+                            r: learning rate to adjust magnitude of weight changes
+                            f(𝒙) - h(𝒙): if output is very underestimated, becomes more positive to increase weight, vice-versa
+                            xi: larger variables with stronger influence change weight more
+
+                            * Classes not linearly seperable / have bad outliers will not be able to converge
+
+                    Hard threshold
+                        Obtained with Heaviside-step function
+                        Return values are exactly 0 or 1
+
+                        Output
+                         1 │  ┌──
+                         0 ├──┘
+                           └──┬── 𝐰'•𝒙'
+                              0
+
+                    Soft threshold
+                        Obtained with logistic functions (e.g. Sigmoid function)
+                        Return values are between 0 and 1, inclusive
+                        Values represent confidence (nearer to 1 means more confident that output is true, vice-versa)
+
+                        Output
+                         1 │  ╭──
+                         0 ├──╯
+                           └──┬── 𝐰'•𝒙'
+                              0
+
+                Support vector classfication/machine - linear and non-linear classifier
+                    Maximum margin separator - boundary that is maximum distance away, in between two classes of data points
+                    Finds the boundary right in the middle separating two classes
+                    Can be used to find boundaries with curves (not just a linear, straight line)
+
+        Regression - Learn function that maps input points to a continuous value
+            e.g.
+            Given existing data set with daily caloric intake and blood-sugar level,
+            regress a line showing the relationship between daily caloric intake and blood-sugar level,
+            to estimate a future patient's blood-sugar level given a their daily caloric intake
+
+            using arbitrary units,
+            daily caloric intake / blood-sugar levels (label)
+                      4                       5
+                      8                       6
+                      5                       4
+                      9                       7
+                      8                       9
+                      7                       9
+                      6                       8
+                      4                       3
+
+            blood-sugar level
+                  9 ┤      xx╱
+                  8 ┤     x ╱
+                  7 ┤      ╱ x
+                  6 ┤     ╱ x
+                  5 ┤   x╱
+                  4 ┤   ╱x
+                  3 ┤  ╱x
+                  2 ┤ ╱
+                  1 ┤╱
+                    └┬┬┬┬┬┬┬┬┬ daily caloric intake
+                     ╵   ╵   ╵
+                     1   5   9
+
+            Given a new patient who has a daily caloric intake of 7, interpolate an estimate of blood-sugar level at 7
+
+    Hypothesis evaluation
+        Loss function
+            Loss - the utility loss of a function increases as it inaccuracy increases
+            0-1 loss function:
+                L(actual, predicted)
+                    if actual == predicted
+                        return 0
+                    return 1
+            L1 loss function:
+                L1(actual, predicted)
+                    return |actual - predicted|
+            L2 loss function:
+                L2(acual, predicted)
+                    return (actual - predicted)^2
+
+            An optimised trained function minimises the loss value every iteration
+            * If loss threshold is too narrow, overfitting may result
+
+        Overfitting - trained model replicates training data set too accurately, including its additional noise
+                      and no general relationship is seen (excels on training data, poor on unseen data)
+            In classification problems, if outliers from side A are accomodated, a point at side B may be mistaken as A
+            In regression problems, a general trend may not be found if the line merely connects the dots rather than be a best-fit
+
+            Counter:
+                Regularization:
+                    Rather than finding global minimum for "cost = loss", find it for "cost = loss + complexity"
+                    cost(h function) = loss(h function) + λ*complexity(h function)
+
+                        λ: tolerance for complexity/penalizing multiplier(any real number)
+                        complexity(h function): more complexity from more parameters and may indicate fine-tuning to the training data
+
+            Accuracy check:
+                Methods:
+                    Holdout cross-validation
+                        Split the given data set into a training set and a testing set.
+                        Model a function based on the training set.
+                        Cross references its accuracy with the unseen testing set.
+
+                    k-fold cross-validation (prevents wastage of half the given data when it could be used for training)
+                        Split the given data into k sets.
+                        Take one as the testing set and the rest as the training set, taking turns as testing set, k number of times.
+                        Train model function with the training set and cross-validate its accuracy with unseen testing set data
+                        Average the accuracies of the k number of cross-validations.
+
+                Using accuracy data, fine-tune a new model:
+                    With a set of hyperparameters, get the accuracy value of the resultant model(s)
+                    Choose new sets of hyperparameters over multiple iterations via trial-and-error until satisfactory accuracy
+                    Hyperparameters refer the the parameters used during training
+                    (Perceptron's learning multiplier, Regularization's penalty multiplier etc.)
+
+Reinforcement learning - Giving preference to each conclusion to consider in future decision making
+                         (can be used in place of search functions like minimax functions for some context)
+    Method: Circular loop where agent gets state and outputs action, environment gets action and updates state and reward for agent
+    Model: Markov decision process - models decision making, made of a chain of states, connected by actions, with a reward/punishment
+        Markov chain:
+        e.g.
+                            ┌─ -1.0 ─╼ S2                     Each state stores an absolute reward value
+                            │                                 Each action stores a reward potential
+             ┌─ +0.5 ── S1 ─┴─ +1.0 ─╼ S2'                        Reward values
+             │                         ╿ +1.0                     -1    0    1
+        S0 ╾─┼─ +0.3 ── S1' ───────────┼─────── -1.0 ─╼ S2''      S1''  S0   S2'
+             │                         ╽ -1.0                     S2    S1
+             └─ -1.0 ─╼ S1''           S2'''                      S2''  S1'
+                                                                  S2'''
+    Elements:
+        Set of states, s = {s0, s1, s2, ..., sn}
+        Actions at state sn, a = [a0, a1, a2, ..., an]
+        Transition model, probability P(s(n+1) | sn, an)
+        Reward function, f(sn, an, s(n+1)), as each line between nodes have an individual reward value
+    Algorithm:
+        Q-learning - determine the reward value of each action from each state after multiple iterations:
+            Approach:
+                1 - Initialize reward estimate function, Q(s, a) = 0 for every action a at every state s
+                2 - After action a at state s, reward value is updated to Q(s, a).
+                    - If a current estimate exists, adjust the estimate by considering both new and existing values
+
+                To update an estimate based on old and new values:
+                    Q(s, a) = Q(s, a) + α*((r + γ*max(Q(s', a'))) - Q(s, a))
+                        α: learning rate to adjust the magnitude the reward estimate changes each iteration
+                        r: newly obtained reward value                                          ─┬─ add up for new reward value estimate
+                        max(Q(s', a')): future reward value estimate, assuming greediest action ─┘
+                        γ: future reward importance coefficient to adjust how valued future rewards are
+                        Q(s, a): existing reward value estimate
+
+                    The reward value propogates backwards from the terminal state into Q(sn, an), into Q(s(n-1), a(n-1)) and so forth
+
+            Function approximation:
+                Q(s, a) can be approximated using a separate function taking in features as arguments to output reward estimate
+                    - If a resultant state and a pre-existing one are similar, their Q(s, a) can be assumed to be similar
+                    - Using a board state, an estimated reward value can be found in some cases
+                    (e.g. Chess: heuristic from remaining chess pieces & two boards may be the same after a different set of actions)
+                Saves time and memory especially for complex Markov chains with many states and actions
+            Decision making:
+                Greedy decision-making - at state s, choose action a that has the highest Q(s, a)
+
+                Explore vs Exploit - exploit takes the actions with highest Q(s, a), explore might find a path with new highest Q(s, a)
+                    ε-greedy decision making - with probability ε, take a random path to explore rather than exploit
+
+Unsupervised learning - Generate estimations for a criteria, given a data set without labels (i.e. evidence + unknown criteria)
+    Method - Iterates multiple times on a data set to obtain a conclusion
+        Task:
+            Clusterization - organising data points into separate groups such that similar data points are grouped together
+                Algorithm:
+                    k-means clustering - add k cluster centers into a data set, recentering it over multiple iterations
+                        Approach:
+                            1 - Randomly place k centers onto a data set
+                            2 - Assign each data point to the closest cluster center to form a cluster
+                            3 - Update the cluster centers' position to the positional center of the new cluster
+                            4 - Reassign the data points to the new closes clister centers and form a new cluster
+                            5 - Reupdate the cluster centers' position
+                            6 - Repeat 4 and 5 until no changes in clusters' data points

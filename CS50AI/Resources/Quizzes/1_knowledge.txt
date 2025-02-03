@@ -1,0 +1,88 @@
+Question
+Answer: (  ) ✓ ✗
+Reason:
+Error:
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 1
+
+Consider these logical sentences:
+
+-    If Hermione is in the library, then Harry is in the library.
+-    Hermione is in the library.
+-    Ron is in the library and Ron is not in the library.
+-    Harry is in the library.
+-    Harry is not in the library or Hermione is in the library.
+-    Ron is in the library or Hermione is in the library.
+
+Which of the following logical entailments is true?
+
+1.    Sentence 6 entails Sentence 2
+2.    Sentence 1 entails Sentence 4
+3.    Sentence 6 entails Sentence 3
+4.    Sentence 2 entails Sentence 5
+5.    Sentence 1 entails Sentence 2
+6.    Sentence 5 entails Sentence 6
+
+Answer ( 3 ) ✗
+Reason: For "Ron is in or Hermione is in", Ron has to be in or not in which is described by the third sentence ✗
+Error: Third sentence uses AND instead of OR. "Ron is in AND Ron is not in" is a false sentence
+
+Answer ( 4 ) ✓
+Reason: For all cases that "Hermione is in", it is true that "Harry is not in or Hermione is in, or both" holds valid
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 2
+
+There are other logical connectives that exist, other than the ones discussed in lecture.
+One of the most common is “Exclusive Or” (represented using the symbol ⊕).
+The expression A ⊕ B represents the sentence “A or B, but not both.” Which of the following is logically equivalent to A ⊕ B?
+
+1.    (A ∨ B) ∧ ¬ (A ∧ B)
+2.    (A ∧ B) ∨ ¬ (A ∨ B)
+3.    (A ∨ B) ∧ (A ∧ B)
+4.    (A ∨ B) ∧ ¬ (A ∨ B)
+
+Answer ( 1 ) ✓
+Reason: First sentence describes "A or B AND not A and B"
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 3
+
+Let propositional variable R be that “It is raining,” the variable C be that “It is cloudy,” and the variable S be that “It is sunny.”
+Which of the following a propositional logic representation of the sentence “If it is raining, then it is cloudy and not sunny.”?
+
+1.    (R → C) ∧ ¬S
+2.    R → C → ¬S
+3.    R ∧ C ∧ ¬S
+4.    R → (C ∧ ¬S)
+5.    (C ∨ ¬S) → R
+
+Answer ( 4 ) ✓
+Reason: Fourth sentence describes "Rain IMPLIES cloudy and not sunny"
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 4
+
+Consider, in first-order logic, the following predicate symbols.
+Student(x) represents the predicate that “x is a student.”
+Course(x) represents the predicate that “x is a course.”
+Enrolled(x, y) represents the predicate that “x is enrolled in y.”
+
+Which of the following is a first-order logic translation of the sentence
+“There is a course that Harry and Hermione are both enrolled in.”?
+
+1.    ∃x. Course(x) ∧ Enrolled(Harry, x) ∧ Enrolled(Hermione, x)
+2.    ∀x. Course(x) ∧ Enrolled(Harry, x) ∧ Enrolled(Hermione, x)
+3.    ∃x. Enrolled(Harry, x) ∧ ∃y. Enrolled(Hermione, y)
+4.    ∀x. Enrolled(Harry, x) ∧ ∀y. Enrolled(Hermione, y)
+5.    ∃x. Enrolled(Harry, x) ∨ Enrolled(Hermione, x)
+6.    ∀x. Enrolled(Harry, x) ∨ Enrolled(Hermione, x)
+
+Answer ( 1 ) ✓
+Reason: First sentence describes "Exists course x AND Harry is enrolled in x AND Hermione is enrolled in x"
+

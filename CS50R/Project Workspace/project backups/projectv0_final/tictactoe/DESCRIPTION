@@ -1,0 +1,29 @@
+Package: tictactoe
+Title: Tic-Tac-Toe
+Description: 
+    Play Tic-Tac-Toe with an AI or with your friends.
+    \
+    Tic-Tac-Toe is a popular table-top game played worldwide,
+    where two players take turns placing their symbols on a three-by-three grid,
+    attempting to win by having their symbols consecutive in a row.
+    \
+    Use the function, rungame(), to run the game, or create your own script to
+    run the game with the other helper functions provided.
+    \
+    The game supports a pass-and-play game mode or an AI game mode, chosen with
+    the function, startgame(). The AI is programmed with the minimax algorithm
+    (learnt from CS50x) and can be called with the function, minimax().
+    \
+    This project took 14 hours over 2 days to complete and is for CS50R.
+Version: 1.0
+Authors@R: 
+    person(
+      "Yi Kang", "Choong", 
+      email = "yikang.choong.uni@gmail.com", 
+      role = c("aut", "cre", "cph")
+    )
+License: MIT + file LICENSE
+Video: https://youtu.be/E2a_zJD-91o
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

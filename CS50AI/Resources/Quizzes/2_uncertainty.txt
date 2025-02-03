@@ -1,0 +1,95 @@
+Question
+Answer: (  ) ✓ ✗
+Reason:
+Error:
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 1
+
+Consider a standard 52-card deck of cards with 13 card values (Ace, King, Queen, Jack, and 2-10)
+in each of the four suits (clubs, diamonds, hearts, spades).
+If a card is drawn at random, what is the probability that it is a spade or a two?
+
+Note that “or” in this question refers to inclusive, not exclusive, or.
+
+1.    About 0.019
+2.    About 0.077
+3.    About 0.17
+4.    About 0.25
+5.    About 0.308
+6.    About 0.327
+7.    About 0.5
+8.    None of the above
+
+Answer ( 5 ) ✓
+Reason: P(Spades ∨ 2) = P(Spades) + P(2) - P(Spades ∧ 2)  //  "Spades ∨ 2" - 13 + 4 - 1 = 16 cards / 52 total cards
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 2
+
+Imagine flipping two fair coins, where each coin has a Heads side and a Tails side,
+with Heads coming up 50% of the time and Tails coming up 50% of the time.
+What is probability that after flipping those two coins, one of them lands heads and the other lands tails?
+
+Answer: 0.5 ✓
+Reason: Given first coin flip, P(¬first coin) = 0.5
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 3
+
+Recall the Bayesian Network shown in lecture, reproduced below.
+
+Rain                    Rain  {None, Light, Heavy}
+│   ↘
+│    Maintenence        Maintenence  {Yes, No}
+↓   ↙
+Train                   Train    {On time, Delayed}
+↓
+Appointment             Appointment   {Attend, Miss}
+
+Which of the following sentences is true?
+
+1.    Assuming we know the train is on time, whether or not there is rain affects the
+      probability that the appointment is attended.
+
+2.    Assuming we know there is rain, whether or not there is track maintenance does not affect the
+      probability that the train is on time.
+
+3.    Assuming we know there is track maintenance, whether or not there is rain does not affect the
+      probability that the train is on time.
+
+4.    Assuming we know the train is on time, whether or not there is track maintenance does not affect the
+      probability that the appointment is attended.
+
+5.    Assuming we know there is track maintenance, whether or not there is rain does not affect the
+      probability that the appointment is attended.
+
+Answer ( 4 ) ✓
+Reason: The "Appointment" node is only dependent on the "Train" node and does not depend on the "Maintenance" node
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 4
+
+Two factories — Factory A and Factory B — design batteries to be used in mobile phones.
+Factory A produces 60% of all batteries, and Factory B produces the other 40%.
+2% of Factory A’s batteries have defects, and 4% of Factory B’s batteries have defects.
+What is the probability that a battery is both made by Factory A and defective?
+
+ 1.    0.008
+ 2.    0.012
+ 3.    0.02
+ 4.    0.024
+ 5.    0.028
+ 6.    0.06
+ 7.    0.12
+ 8.    0.2
+ 9.    0.429
+10.    0.6
+11.    None of the above
+
+Answer ( 2 ) ✓
+Reason: P(A ∧ Defective) = P(A) * P(Defective | A) = 0.6 * 0.02

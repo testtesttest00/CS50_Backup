@@ -1,0 +1,210 @@
+Search:
+    Look for solutions (e.g. Puzzle 15, Mazes, Google Maps)
+
+Definitions:
+    Agent - Entity that perceives and act in an environment (e.g. a car on google maps, the player of the puzzle)
+    State - Configuration of the agent and its environment
+    Initial State - State of which the agent begins in
+    Actions - List of possible actions given a state, Actions(state s) = [set of actions]
+    Transition Model - Description of the resultant state after an action, Results(state s, action a) = state result
+    State Space - Set of all possible states reachable by any sequence of actions
+    Goal Test - Function to check if given state is a goal state
+    Path Cost - Numerical cost to a given path of actions (each action may have a different cost)
+    Solution - The sequence of actions taken from initial state to reach goal state
+    Optimal Solution - One or more solution with the lowest path cost
+
+    typedef struct node{
+        state
+        node parent
+        action (parent.state to self.state)
+        float path_cost
+    } node;
+
+    Frontier - The list of nodes to be explored and are states, one action away, from previously explored nodes
+
+Functions and Variables in Search:
+    S0: initial state
+    Actions(Sx:current state): legal actions
+    Results(Sx, Actions(Sx)[index] = action): transition model
+    Sg: goal state (checkif == Sx)
+    int path cost
+
+Approach for Search Algorithm:
+    1 - Set a Frontier, f = [node.state = initial state]
+    2 - Set a list of explored set, e = [(empty)]
+    3 - Loop until return:
+        - Extract a node, n, from f (so that f has one less node)*
+        - Add n into e
+        - Check if n.state == goal state: return solution found
+        - Expand n to obtain adjacent nodes (newnode.state = result(n.state, n.action[i]))
+        - Add newnode to f if (not in f && not in e)*
+        - Check if f == [(empty)]: return no solution
+    *-steps have nuances affecting characteristics of search
+
+Search Types:
+    Uninformed Searching Methods (Strategies that uses no problem-specific knowledge)
+        Depth-first
+            - Frontier data: stack (last-in first-out)
+            - Looks at newest nodes before older ones in the frontier
+            - Goes to the end of a search path before exploring the next path (expands the deepest node currently in frontier)
+        Breadth-first
+            - Frontier data: queue (first-in first-out)
+            - Looks at oldest nodes before newer ones in the frontier
+            - Goes to the earliest node at every search path (expands the shallowest node currently in frontier)
+
+        (in terms of comparison,
+        think of DFS as a gamble -
+            if lucky, each path chosen at each split is correct.
+            if unlucky, spends up to an infinite amount of time in one search path
+        think of BFS as a saikang warrior -
+            goes through every node in a wave/batch that is n-steps away from initial node (hence solution is optimal)
+            spends a lot of memory to remember explored nodes)
+
+    Informed Searching Methods (Strategies using problem-specific knowledge to improve search efficiency)
+    (Adds conditions for node selection within the frontier)
+        Greedy Best-first
+            - Condition: node closest/lowest cost to goal (returned by heuristic function, h(n))
+            - Looks at the node with most preferential heuristics
+            - Goes to the node with best heuristics (expands the node closest to goal)
+            (example: Manhattan distance heuristics (maze, h(n) = (x1-x2)+(y1-y2), expands node with lowest h(n)))
+
+        A*
+            - Condition: node lowest (cost to get from initial to node + distance/cost to goal (returned by heuristics h(n)))
+            - Looks at the node with most preferenctial heuristics
+            - Goes to the node with best heuristics (expands the node with lowest (cost taken + estimated cost to take))
+            (example: Manhattan distance heuristics + steps away from initial state)
+
+        (in terms of comparison-
+        A* limits situations where there is a windy path that is near the goal
+        (allowing algorithm to take one step back to go two steps forward)
+        A* will +2 to the heuristics between steps (+1 step, +1 distance from end goal)
+        and alternate path will catch up in heuristics (only +1 step between nodes)
+
+        however A* is only optimal if:
+        h(n) (estimate remaining steps to goal) is admissible does not overestimate true cost &
+        h(n) is consistent (for every node n, successor node n', step cost c: h(n) <= h(n') + c)
+
+        h(n) is admissible: if underestimate=0, A* will search optimal path where next path cost is least
+        h(n) is consistent: every subsequent node 1 step closer to goal will take at least 1 step cost)
+
+
+Adverserial Search:
+    Two sides searches in order to win or tie the other (e.g. Tic-Tac-Toe)
+
+Minimax:
+    MAX player and MIN player takes opposite sides of a two-player game.
+    When MAX wins board value goes to 1, when MIN wins it is -1, and a tie gives 0.
+    MAX tries will try to win over getting tie (board = 1), get tie over losing (board = 0), maximising board score.
+    MIN tries will try to win over getting tie (board = -1), get tie over losing (board = 0), minimising board score.
+
+Functions and Variables in Game:
+    S0: initial state
+    Player(Sx: current state): player to move
+    Actions(Sx): legal actions
+    Results(Sx, Actions(Sx)[index] = action): transition model
+    Terminal(Sx): check if game has ended (rather than checking for goal state)
+    Utility(Sx): numerical value of board
+
+Processing Next Move:
+Let X be MAX player, 0 be MIN player
+
+          S0            (X to move)
+          ╱╲
+         ╱  ╲
+        A    B          Actions(S0) = [A, B] -> X looks ahead future steps to see which to choose
+       ╱      ╲
+    S1(A)     S1(B)     (O to move)
+     ╱╲        ╱╲
+    ╱  ╲      ╱  ╲
+   C    D    E    F     Actions(S1(A)) = [C, D] Actions(S2(B)) = [E, F] -> X considers how O will look ahead future steps
+  ╱      ╲  ╱      ╲
+S2(C) S2(D)S2(E)  S2(F) (Terminal == True)
+Xwins  Tie Owins  Tie/Xins
+
+
+          S0            (X to move)
+          ╱╲
+         ╱  ╲
+        A    B
+       ╱      ╲
+    S1(A)     S1(B)     (O to move)
+      ╲        ╱
+       ╲      ╱
+        D    E          O will choose D in S1(A), E in S1(B)
+         ╲  ╱
+       Tie Owins
+
+
+          S0            (X to move)
+          ╱╲
+         ╱  ╲
+        A    B
+       ╱      ╲
+      0       -1        S1(A) inherits board value of S2 based on O's actions (Utility(S1(A)) = 0, Utility(S1(B)) = -1)
+
+
+          S0            (X to move)
+          ╱
+         ╱
+        A               Conclusion: X will choose A in S0
+       ╱
+      0
+
+
+        S0 = 0          Utility(S0) = 0 (Board value can be used in an even earlier board state's considerations)
+
+
+Simplified Minimax Tree:
+
+          ↿0↾           ↿↾ - MAX chooses the action returning highest value board
+          ╱ ╲
+         ╱   ╲
+       ⇃0⇂   ⇃-1⇂        ⇃⇂ - MIN chooses the action returning lowest value board
+       ╱╲     ╱╲
+      1  0  -1  0
+
+Given state, S0:
+MAX player picks action a in Actions(S0) that produces highest value of MIN-VALUE(Results(S0, a))
+MIN player picks action a in Actions(S0) that produces lowest value of MAX-VALUE(Results(S0, a))
+
+          ↿0↾           @S0, MAX player looks at
+          ╱ ╲
+         ╱   ╲
+       ⇃0⇂   ⇃-1⇂        <- this row to find highest value of MIN-VALUE
+
+function MIN-VALUE(state):  (used to consider MAX's next move)
+    if TERMINAL(state):
+        return UTILITY(state)
+    value = -inf (so that in for loop, the first action is viable)
+    for action in ACTIONS(state):
+        value = MAX(v, MAX-VALUE(RESULT(state, action)))  (what is the maximum value after considering all of MIN's countermove)
+    return value
+
+function MAX-VALUE(state):  (used to consider MIN's next move)
+    if TERMINAL(state):
+        return UTILITY(state)
+    value = inf (so that in for loop, the first action is viable)
+    for action in ACTIONS(state):
+        value = MIN(v, MIN-VALUE(RESULT(state, action)))  (what is the minimum value after considering all of MAX's countermove)
+    return value
+
+Optimization:
+
+    Original:
+    A                 ↿5↾
+    B     ⇃5⇂         ⇃1⇂        ⇃2⇂
+    C ↿9↾ ↿6↾ ↿5↾  ↿1↾ ↿4↾ ↿3↾  ↿7↾ ↿2↾ ↿8↾
+
+    Alpha-Beta Pruning:
+    A                 ↿5↾                 during MAX's consideration
+    B     ⇃5⇂        ⇃<=1⇂       ⇃<=2⇂     2 - stopped considering as a new MAX was determined to be unreachable
+    C ↿9↾ ↿6↾ ↿5↾   ↿1↾ ↿↾ ↿↾   ↿7↾ ↿2↾ ↿↾   1 - omit other states if a value lower than a previous MAX-VALUE(A) is found
+
+    Depth-Limited Minimax:
+        255168 Tic-Tac-Toe games
+        10^29000 (lower bound) Chess games
+        If minimax considers to the terminal state, too much time and memory is needed
+
+        A current board value still has to be obtained to calculate next move:
+        Use an evaluation function: function that estimates the expected utility of a game from a given state
+        (e.g. in chess, consider pieces left, positions... to give evaluation bar)

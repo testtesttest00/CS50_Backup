@@ -1,0 +1,7 @@
+export(startgame)
+export(nextmove)
+export(availablemoves)
+export(checkwin)
+export(printboard)
+export(minimax)
+export(rungame)

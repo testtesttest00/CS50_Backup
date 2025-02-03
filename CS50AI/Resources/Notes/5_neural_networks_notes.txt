@@ -1,0 +1,176 @@
+Neural Networks:
+    Layer multiple algorithms to compute output
+
+Artificial neural networks - math models replicating biological neural pathways forming response from stimuli
+    Extension from learning - perceptron:
+        Elements:
+            Inputs
+            Weights
+            Bias
+            Activation function
+                Heaviside step function: 0 if x < a, 1 if x >= a >> Graph is horizontal piecewise function with step-up at threshold
+                Sigmoid logistic function: e^x / (e^x + 1) >> Graph is an S shape with inflection point at threshold
+                Rectified linear unit (ReLU): max(a, x) - a >> Graph is horizontal at 0 until threshold, linear after with gradient = 1
+            Output
+
+            [Input 1] ──(weight 1)──┐                    activation function
+                                    │                             │
+            [Input 2] ──(weight 2)──┤ (weight 0/bias)             ├─────────────── [output]
+                                    │        │                    │
+            ...                     ├────────┴──────── bias + Σ(inputs * weight)
+                                    │
+            [Input x] ──(weight x)──┘
+                 ^                                                                     ^
+            input Layer                                                           output layer
+
+            * each [...] is a unit, each column of multiple [...] is a layer
+            * also known as a single-layered perceptron even though there are two layers
+              (to avoid confusion with a model with multi-layered perceptron that has layers of individual perceptrons)
+            * using the same inputs, multiple single-layered perceptrons can work in parallel to produce multiple outputs
+
+        Modelling logical connectives:
+            Or, And can be modelled by a single perceptron, given x1, x2, 1 = true, 0 = false:
+
+               OR               AND
+             x1               x1
+            1 ┤1 1           1 ┤0 1
+              │0 1             │0 0
+            0 ┼──┬ x2        0 ┼──┬ x2
+              0  1             0  1
+
+            Connective values are linearly separable (perfectly split into two categories with a straight line)
+
+            Exclusive-Or cannot be modelled by a single percentron:
+
+               XOR
+             x1
+            1 ┤1 0
+              │0 1
+            0 ┼──┬ x2
+              0  1
+
+            Labels are not linearly separable; fine-tuning using a multi-layered neural network is needed
+
+        Algorithm:
+            Gradient descent - Function optimizer which can optimise loss function minimization
+                - Start with random weights
+                - Calculate, based on all data points, the gradient of loss function (direction leading to steepest increase in loss)
+                - Update weights according to gradient: θ = θ − α * ∇f(θ)
+                      θ is a weight
+                      α is learning rate
+                      ∇f is gradient of loss function
+                - Repeat until convergence or epoch (number of repeats) is reached
+
+                Normal gradient descent - uses all data points each iteration
+                Mini-batch gradient descent - uses a small batch of data points each iteration
+                Stochastic gradient descent - uses one data point each iteration
+
+    Multi-layered neural networks - complex systems with steps of algorithms (e.g. perceptron) to fine-tune outputs
+        - Has one input layer, one output layer, and at least one hidden layer
+        - Able to map decision boundaries to non-linearly seperable inputs by introducing more weighted linear boundaries
+          (e.g. three linear boundaries layered and added to form a triangle-shaped boundary)
+        - Uses non-linear activation functions to form a range of inputs processed in a hidden layer
+
+        Algorithm:
+            Back-propogation - associating higher weighted units of hidden layers with a higher degree of error to re-weight units
+                - Start with a random set of weights
+                - Calculate error out output layer
+                - Propogating between hidden layers, from output layer to input layer
+                    - Units with more weight contributed greater to errors, and are assumed to have greater errors
+                    - Update weights of units of each layer
+                    - Repeat until convergence or final epoch reached
+
+        Overfitting - Hyperfixation on training data resulting in loss of generalization of trends, adapting worse to unseen data
+            Dropout - Remove random units of a set proportion during single training iterations to reduce reliance of single units
+
+        Deep neural-networks - networks with more than one hidden layer
+
+        Types:
+            Feed-forward neural network - Inputs connect to units in hidden layers in one direction towards the final output production:
+                Multi-layered perceptrons (vanilla neural network) - perceptrons whose outputs are used as inputs for another perceptron
+                    Input layer - Inputs from raw given data
+                    Hidden layer - Intermediate floating-point values that links between input to ouput, although not part of input
+                    Output layer - Final output which should corresponding to the label of a training/testing input data
+
+                    e.g.
+                    [Input 1]──┐══╗
+                               ├────[Layer1 1]──┐
+                    [Input 2]──┤  ║             ├──[Output 1]
+                               ╞══╬═[Layer1 2]──┘
+                    [Input 3]──┘══╝
+                         ^               ^              ^
+                    input layer     dense layer    output layer
+
+                    Dense layer is part of the hidden layer (where given data set knows no data points)
+                    "Dense" refer to each unit being connected to every single unit from the preceding layer
+                    The number of units in the hidden layer is independently determined (higher number means more complex boundaries)
+
+                Convolutional neural networks - highlighting features or patterns from input data and processing based on those instead
+                    Convolution - combine two functions (1 - sample data, 2 - filter (kernel)) for a third function (representation data)
+                                  (e.g. filtering an image to highlight curves and edges)
+
+                    Computer vision - computational method to analyze and understand images
+                        Image convolution - a kernel matrix weights and sums surrounding pixels for each pixel of an image, filtering it
+                        Pooling - Sampling regions of an input to reduce its size, increasing robustness by using regional trends
+                            Max-pooling - Use the maximum value as a representative of a sampled region during pooling
+
+                        e.g.
+                                 convolution           pooling         convolution              pooling
+                                      │                   │                 │                      │
+                        [raw_image] ──┴── [highlighted] ──┴── [condensed] ──┴── [highlighted_v2] ──┴── [condensed_v2]
+                        64 * 64 px        48 * 48 px          40 * 40 px        32 * 32 px             24 * 24 px
+                                                └────────┬────────┘                    └──────────┬──────────┘
+                                                         │                                        │
+                                                low-level features                       high-level features
+                                               (e.g. edges, curves)                   (e.g. detailed textures)
+
+                        inputs = [low-level features + high-level features + 24 * 24 px representative image]
+
+                        [inputs1] ─┐             ┌─ [layerx 1] ─┐
+                        [inputs2] ─┤  [weights]  ├─ [layerx 2] ─┤ [weights x]
+                        [inputs3] ─┼──────┼──────┼─ [layerx 3] ─┼──────┼────── [output]
+                           ...    ─┤  activation ├─ [layerx 4] ─┤ activation
+                        [inputsx] ─┘             └─ [layerx 5] ─┘
+
+            Recurrent neural networks - persistance of parameter values producing related output, while output feeds back as input
+                - Each output alters the weight when fed into the hidden state, saving the context of the output for subsequent use
+                - Can be thought of as multiple hidden layers with the same weights after backpropogation and gradient descent
+
+                e.g.
+                Sentence generation where words have to link smoothly (one-to-many)
+
+                [input] → [network] → [output]    ─── Sentence ideaation
+                              ↓
+                          [network] → [output]    ─┐
+                              ↓                    │
+                          [network] → [output]     ├─ Word chaining
+                              ↓                    │
+                          [network] → [output]    ─┘
+
+                e.g.
+                Video analysis and summarisation (many-to-one)
+
+                [input] → [network]               ─┐
+                              ↓                    │
+                [input] → [network]                ├─ Frame-by-frame analysis while maintaining context
+                              ↓                    │
+                [input] → [network]               ─┘
+                              ↓
+                [input] → [network] → [output]    ─── Summarisation
+
+                e.g.
+                Sentence processing and responding (joining both chains above, many-to-many)
+
+                [input] → [network]               ─┐
+                              ↓                    │
+                [input] → [network]                ├─ Sentence meaning analysis
+                              ↓                    │
+                [input] → [network]               ─┘
+                              ↓
+                [input] → [network] → [output]    ─┐
+                              ↓                    │
+                          [network] → [output]     │
+                              ↓                    ├─ Response creation
+                          [network] → [output]     │
+                              ↓                    │
+                          [network] → [output]    ─┘

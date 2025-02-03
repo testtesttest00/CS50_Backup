@@ -1,0 +1,52 @@
+user: if terminal(board):
+        return None
+
+    def maxplay(state, recordlow): # x's thought process
+        if terminal(state):
+            return utility(state)
+        value = float("-inf")
+        for action in actions(state):
+            value = max(value, minplay(result(state, action), value))
+            if value > recordlow:
+                return value
+        return value
+
+    def minplay(state, recordhigh): # o's thought process
+        if terminal(state):
+            return utility(state)
+        value = float("inf")
+        for action in actions(state):
+            value = min(value, maxplay(result(state, action), value))
+            if value < recordhigh:
+                return value
+        return value
+
+    if player(board) == X:
+        v = maxplay(board, float("inf"))
+        for action in actions(board):
+            if minplay(result(board, action), float("-inf")) == v:
+                return action
+
+    if player(board) == O:
+        v = minplay(board, float("-inf"))
+        for action in actions(board):
+            if maxplay(result(board, action), float("inf")) == v:
+                return action
+
+what sort of optimisation is in this minimax model?
+
+assistant: Your minimax model includes a form of optimization known as **alpha-beta pruning**. This technique helps to reduce the number of nodes evaluated in the minimax algorithm by "pruning" branches that cannot possibly influence the final decision.
+
+In your code, the variables `recordlow` and `recordhigh` act as the alpha and beta values, respectively. These values help to cut off branches in the game tree that do not need to be explored because they cannot affect the final outcome.
+
+For example, in `maxplay`, if `value > recordlow`, the function returns immediately, pruning the remaining branches. Similarly, in `minplay`, if `value < recordhigh`, the function returns immediately.
+
+This optimization significantly improves the efficiency of the minimax algorithm, especially in games with large search trees.
+
+user: if recordlow is the alpha, is recordhigh the beta?
+
+assistant: Yes, that's correct! In your code, `recordlow` acts as the alpha value, and `recordhigh` acts as the beta value. Alpha represents the best value that the maximizer currently can guarantee, while beta represents the best value that the minimizer currently can guarantee.
+
+user: thanks for the sxplanation
+
+assistant: You're welcome! If you have any more questions or need further clarification, feel free to ask.

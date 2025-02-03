@@ -1,0 +1,88 @@
+Question
+Answer: (  ) ✓ ✗
+Reason:
+Error:
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 1
+
+Consider the below neural network, where we set:
+
+-    w0 = -5
+-    w1 = 2
+-    w2 = -1 and
+-    w3 = 3.
+
+x1, x2, and x3 represent input neurons, and y represents the output neuron.
+
+What value will this network compute for y given inputs x1 = 3, x2 = 2, and x3 = 4 if we use a step activation function?
+What if we use a ReLU activation function?
+
+1.    0 for step activation function, 0 for ReLU activation function
+2.    0 for step activation function, 1 for ReLU activation function
+3.    1 for step activation function, 0 for ReLU activation function
+4.    1 for step activation function, 1 for ReLU activation function
+5.    1 for step activation function, 11 for ReLU activation function
+6.    1 for step activation function, 16 for ReLU activation function
+7.    11 for step activation function, 11 for ReLU activation function
+8.    16 for step activation function, 16 for ReLU activation function
+
+Answer ( 5 ) ✓
+Reason: Weighted sum = 2 * 3 + -1 * 2 + 3 * 4 = 16 >= -5
+        H(Weighted sum) = 1
+        max(-5, Weighted sum) - 5 = 11
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 2
+
+How many total weights (including biases) will there be for a fully connected neural network with
+a single input layer with 3 units, a single hidden layer with 5 units, and a single output layer with 4 units?
+
+Answer: 37 ✗
+Reason: Input - Hidden = 3 * 5 + 1 = 16, Hidden - Output = 5 * 4 + 1 = 21, Input - Hidden - Output = 16 + 21 = 37
+Error: Number of weight != 1 at each layer, but is the number of perceptrons instead
+
+Answer: 44 ✓
+Reason: Input - Hidden = 3 * 5 + 5 = 20, Hidden - Output = 5 * 4 + 4 = 24, Input - Hidden - Output = 20 + 24 = 44
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 3
+
+Consider a recurrent neural network that listens to a audio speech sample, and classifies it according to whose voice it is.
+What network architecture is the best fit for this problem?
+
+1.    One-to-one (single input, single output)
+2.    Many-to-one (multiple inputs, single output)
+3.    One-to-many (single input, multiple outputs)
+4.    Many-to-many (multiple inputs, multiple outputs)
+
+Answer ( 2 ) ✓
+Reason: Multiple timestamps of speech sample into single voice
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 4
+
+Consider a 4x4 grayscale image with the following pixel values.
+
+ 2,  4,  6,  8
+16, 14, 12, 10
+18, 20, 22, 24
+32, 30, 28, 26
+
+What would be the result of applying a 2x2 max-pool to the original image?
+
+(Note: Answers are formatted as a matrix [[a, b], [c, d]] where [a, b] is the first row and [c, d] is the second row.)
+
+1.    [[16, 12], [32, 28]]
+2.    [[16, 14], [32, 30]]
+3.    [[22, 24], [32, 30]]
+4.    [[14, 12], [30, 28]]
+5.    [[16, 14], [22, 24]]
+6.    [[16, 12], [32, 30]]
+
+Answer ( 1 ) ✓
+Reason: [2, 4, 16, 14] > 16, [6, 8, 12, 10] > 12, [18, 20, 32, 30] > 32, [22, 24, 28, 26] > 28

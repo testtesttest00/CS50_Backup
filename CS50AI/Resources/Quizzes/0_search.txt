@@ -1,0 +1,86 @@
+Question
+Answer: (  ) ✓ ✗
+Reason:
+Error:
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 1
+
+Between depth first search (DFS) and breadth first search (BFS), which will find a shorter path through a maze?
+
+1.    DFS will always find a shorter path than BFS
+2.    BFS will always find a shorter path than DFS
+3.    DFS will sometimes, but not always, find a shorter path than BFS
+4.    BFS will sometimes, but not always, find a shorter path than DFS
+5.    Both algorithms will always find paths of the same length
+
+Answer ( 4 ) ✓
+Reason: BFS will look at nodes that are closest to the initial state
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 2
+
+Consider the below maze. Grey cells ('#') indicate walls.
+A search algorithm was run on this maze, and found the yellow highlighted path ('.') from point A to B.
+In doing so, the red highlighted cells ('_') were the states explored but that did not lead to the goal.
+╔╦1╦╦╦╦╦7╦╦╦12╦╗
+1  #   #  #B.. ╣
+╠  # #   ####. ╣
+╠    # #  #__. ╣
+╠ # ## # # ##. ╣
+╠ ###  # # ... ╣
+╠ _##### ##.## ╣
+╠ _###...##.## ╣
+8 A....#.... # ╣
+╚╩╩╩╩╩╩╩╩╩╩╩╩╩╩╝
+Of the four search algorithms discussed in lecture —
+depth-first search, breadth-first search,
+greedy best-first search with Manhattan distance heuristic, and A* search with Manhattan distance heuristic
+— which one (or multiple, if multiple are possible) could be the algorithm used?
+
+1.    Could only be A*
+2.    Could only be greedy best-first search
+3.    Could only be DFS
+4.    Could only be BFS
+5.    Could be either A* or greedy best-first search
+6.    Could be either DFS or BFS
+7.    Could be any of the four algorithms
+8.    Could not be any of the four algorithms
+
+Answer ( 3 ) ✓
+Reason: Can be DFS - Each search path used goes to the deepest node
+        Cannot be BFS - Nodes closer to A are not checked (e.g. node @ row 6 column 7)
+        Cannot be greedy best-first w/ Manhattan - Higher heuristic nodes were chosen (e.g. node @ row 8 column 7)
+        Cannot be A* w/ Manhattan - Higher heuristic + steps nodes were chosen (e.g. node @ row 8 column 7)
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 3
+
+Why is depth-limited minimax sometimes preferable to minimax without a depth limit?
+
+1.    Depth-limited minimax can arrive at a decision more quickly because it explores fewer states
+2.    Depth-limited minimax will achieve the same output as minimax without a depth limit, but can sometimes use less memory
+3.    Depth-limited minimax can make a more optimal decision by not exploring states known to be suboptimal
+4.    Depth-limited minimax is never preferable to minimax without a depth limit
+
+Answer ( 1 ) ✓
+Reason: Situations like chess have too many moves too consider especially at the start of the game
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 4
+
+Consider the Minimax tree below, where the green up arrows ↿↾ indicate the MAX player and red down arrows ⇃⇂ indicate the MIN player.
+The leaf nodes are each labelled with their value.
+
+A                 ↿↾
+B     ⇃⇂          ⇃⇂          ⇃⇂
+C ↿9↾ ↿6↾ ↿5↾  ↿1↾ ↿4↾ ↿3↾  ↿7↾ ↿2↾ ↿8↾
+
+What is the value of the root node?
+
+Answer: 5 ✓
+Reason: MIN nodes @ depth B: ⇃5⇂ ⇃1⇂ ⇃2⇂ -> MAX node @ depth A: ↿5↾

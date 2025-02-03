@@ -1,0 +1,341 @@
+Language:
+    Formulate sentences of human language
+
+Natural language processing - processing spoken human languages using computations:
+    Tasks:
+        - Automatic summarisation
+        - Information extraction
+        - Machine translation
+        - Question answering
+        - Text classification
+        etc.
+
+    Syntax - Structure of sentences
+    Semantics - Meaning of sentences according to its context
+
+    Analysing sentences:
+        Formal grammar - Rules of sentence generation
+            Context-free grammar - Syntax rules during sentence generation
+                - Associating words to a category
+                - Establishing what categories are linked together
+                - Creation of a sentence using categories
+
+                e.g.
+                - Associating words to a category
+                    Noun (N)                  -> Apple | Tree | Garden | Worms | ...
+                    Verb (V)                  -> Eat | Grow | Grew | ...
+                    Determiner (D)            -> The | A | An | ...
+                    Proposition (P)           -> On | Above | Below | At | In | With | ...
+                    Adjective (A)             -> Big | Red | Tall | ...
+
+                - Establishing what categories are linked together
+                    Adjective phrase (AP)     -> A | A,AP                (e.g. Red | Red,Tall)
+                    Noun phrase (NP)          -> N | D,NP | AP,NP | N,PP (e.g. Tree | The,Tree | Big,Tree | Tree,At)
+                    Verb phrase (VP)          -> V | V,NP | V,NP,PP      (e.g. Eat | Eat,Apple | Grow,Tree,At)
+                    Propositional phrase (PP) -> P NP                    (e.g. In,Garden)
+
+                - Creation of a sentence using categories
+                    Sentence (S)              -> NP VP                   (e.g. The,Tree,Grew,A,Red,Apple,With,Worms)
+
+                * Analysing sentence "The tree grew a red apple with worms":
+
+                    Difference in semantics allow for multiple parse trees to be drawn:
+                    "with worms" - Using worms          OR  "with worms" - Has worms
+                                                         │
+                    S                                    │  S
+                    ├────────────┐                       │  ├────────────┐
+                    │            │                       │  │            │
+                    NP           VP                      │  NP           VP
+                    │            │                       │  │            │
+                    ├─────┐      ├───┬──────────┐        │  ├─────┐      ├───┐
+                    │     │      V   NP         PP       │  │     │      V   NP
+                    D     NP     │   │          │        │  D     NP     │   │
+                    │     │ "Grew"   ├───┐      ├───┐    │  │     │ "Grew"   ├───┐
+                    "The" N          │   │      │   │    │  "The" N          │   │
+                          │          D   NP     P   NP   │        │          D   NP
+                     "Tree"          │   │      │   │    │   "Tree"          │   │
+                                   "A"   │ "With"   N    │                 "A"   ├───┐
+                                         ├───┐      │    │                       │   │
+                                         │   │  "Worms"  │                       AP  NP
+                                         AP  NP          │                       │   ├───────┐
+                                         │   │           │                       A   N       PP
+                                         A   N           │                       │   │       │
+                                         │   │           │                   "Red"   "Apple" ├───┐
+                                     "Red"   "Apple"     │                                   │   │
+                                                         │                                   P   NP
+                                                         │                                   │   │
+                                                         │                              "With"   "Worms"
+                                                         │
+
+    Generating sentences:
+        Tokenization - Split a sequence of characters into pieces of tokens based on a given criteria
+            𝑛-grams - sampling tokens of 𝑛 words from the sentence to notice probability of continuous words:
+                e.g.
+
+                "The tree grew a red apple with worms. The trew also grew an apple with no worms."
+                Phrase (𝑛 = 2) // Occurance
+                "The tree"     // 2
+                "tree grew"    // 1
+                "grew a"       // 1
+                "a red"        // 1
+                "red apple"    // 1
+                "apple with"   // 2
+                "with worms"   // 1
+                "tree also"    // 1
+                "also grew"    // 1
+                "grew an"      // 1
+                "an apple"     // 1
+                "with no"      // 1
+                "no worms"     // 1
+
+                "The tree is in the garden. The tree is big."
+                Phrase (𝑛 = 3)  // Occurance
+                "The tree is"   // 2
+                "tree is in"    // 1
+                "is in the"     // 1
+                "in the garden" // 1
+                "tree is big"   // 1
+
+                Markov chain - chain of the probability of next state given a current state
+                    "The" →      "tree"     →      "is"      → ...
+                            P("tree"|"The")   P("is"|"tree")
+
+    Text classification - Grouping texts based on semantics:
+        e.g.
+        "It is so round"
+        "Big and strong"
+        "Brown color"
+        "I like its red color"
+        "Tastes sweet and juicy"
+
+        Categorise into "descriptions for an apple" vs "descriptions of a tree" based on *keywords*
+            "It is so *round*" - Apple
+            "*Big* and *strong*" - Tree
+            "*Brown* color" - Tree
+            "I like its *red* color" - Apple
+            "*Tastes* *sweet* and *juicy*" - Apple
+
+        Bag-of-words model - model using an unordered collection of words of a sentence during language processing
+            Naive Bayes - Using Bayes' rule during processing:
+                P(A | B) = P(B | A) * P(A) / P(B) = P(A ∧ B) / P(B)
+                P(A | B) ∝ P(B | A) * P(A)
+                P(A | B) ∝ P(A ∧ B)
+
+                If A is a category, B is a sentence,
+                P(A | B) ∝ P(A ∧ B1 ∧ B2 ∧ ... ∧ Bn), where n is the number of words in the sentence
+                P(A | B) ∝ P(B | A) * P(A)
+                P(A | B) naively-∝ P(B1 | A) * P(B2 | A) * ... * P(Bn | A) * P(A)
+                (naively-∝ as it assumes each word has same weight and context when determining the sentence category)
+
+                P(Bn | A) and P(A) can be found from given data
+
+                e.g.
+                "It is so round" - Apple
+                "Big and strong" - Tree
+                "Brown color" - Tree
+                "I like its red color" - Apple
+                "Red skin" - Apple
+                "Red leaves in autumn" - Tree
+                "Juicy and big" - Apple
+                "Tastes sweet and juicy" - Apple
+
+                Classify this sentence: "Big and red"
+                    P(Apple | Sentence) naively-∝ P(Apple) * P("Big" | Apple) * P("and" | Apple) * P("red" | Apple)
+                    P(Tree | Sentence) naively-∝ P(Tree) * P("Big" | Tree)* P("and" | Tree) * P("red" | Tree)
+
+                    P(Apple) = 0.60         // P(Tree) = 0.40
+                    P("Big" | Apple) = 0.50 // P("Big" | Tree) = 0.50
+                    P("and" | Apple) = 0.67 // P("and" | Tree) = 0.33
+                    P("red" | Apple) = 0.67 // P("red" | Tree) = 0.33
+
+                    P(Apple | Sentence) ∝ 3/5 * 1/2 * 2/3 * 2/3
+                                        = 12/90
+                    P(Tree | Sentence) ∝ 2/5 * 1/2 * 1/3 * 1/3
+                                    = 2/90
+                    Normalisation:
+                    P(Apple | Sentence) = 12/14 = 0.86
+                    P(Tree | Sentence) = 2/14 = 0.14
+
+                    Sentence has 86% chance to be under "descriptions for an apple"
+                    Sentence has 14% chance to be under "descriptions of a tree"
+
+                Additive smoothing - Addition of α to each value in the words distribution to smooth the data (word appearance = x + α)
+                    Laplace smoothing: α = 1, pretend to see words at least once, preventing P(Word) = 0 which nullifies probability
+
+    Neural network:
+        Word representation - Representing words in a mathematical way to plug into a neural network
+            One-hot representation - create vectors for each word with a single "1" at the position of its word in the sentence
+                e.g.
+                "Big red apple"
+                "Big"   = [1, 0, 0]
+                "Red"   = [0, 1, 0]
+                "Apple" = [0, 0, 1]
+
+                Limitations:
+                    Length of vector - Memory needed for long data sources will be demanding
+                    Quality of representation - Words are represented by its position and not its meaning
+            Distributed representation - create vectors for each word with weights distributed by its meaning
+                - Obtain distribution of word vectors by the neighboring words
+                  e.g. I like juicy ___ before lunch -> "apple", "orange", "fruit" can fill same context and have similar distributions
+
+                e.g.
+                "Big red apple"
+                "Big"   = [0.3, 0.1]
+                "Red"   = [0.2, 0.2]
+                "Apple" = [-0.2, -0.2]
+                    y
+                    │• ─ "Big"
+                    │ • ─ "Red"
+                    │
+                ────┼──── x
+                    │
+                    │
+                •   │
+                └─ "Apple"
+                "Big" and "Red" are more alike (both adjectives) vs "Apple" (noun)
+
+                word2vec - model for generating a vector for every word
+                    Since they are vectors, relationships between words can be transposed
+                        e.g.
+                                  "Apples"
+                                 ╱
+                                ╱ vector = "Apples"-"Apple"
+                               ╱
+                        "Apple"
+                                 ?
+                                ╱
+                               ╱ vector = "Apples"-"Apple"
+                              ╱
+                        "Tree"
+                                 "Trees"
+                                ╱
+                               ╱ vector = "Apples"-"Apple"
+                              ╱
+                        "Tree"
+
+                        "vector" represents difference between singular and plural noun in this example
+
+        Recurrent neural network is used as the number of inputs and outputs are not fixed:
+
+            [input] → [network]               ─┐
+                          ↓                    │
+            [input] → [network]                │
+                          ↓                    ├─ Encoding
+            [input] → [network]                │
+                          ↓                    │
+            [input] → [network] → [output]    ─┤
+                          ↓                    │
+            [input] → [network] → [output]     │
+                          ↓                    ├─ Decoding
+            [input] → [network] → [output]     │
+                          ↓                    │
+            [input] → [network] → [output]    ─┘
+
+            In between (at every "↓"), a hidden state (H) is updated which contains information on texts
+
+                [input] → [network]               ─┐
+                              ↓                    │
+                              H                    │
+                              ↓                    │
+                [input] → [network]                │
+                              ↓                    │
+                              H                    ├─ Encoding
+                              ↓                    │
+                [input] → [network]                │
+                              ↓                    │
+                              H                    │
+                              ↓                    │
+                [input] → [network] → [output]    ─┤ (input can be an "end" signal)
+                              ↓                    │
+                              H                    │
+                              ↓                    │
+                [input] → [network] → [output]     │
+                              ↓                    │
+                              H                    ├─ Decoding
+                              ↓                    │
+                [input] → [network] → [output]     │
+                              ↓                    │
+                              H                    │
+                              ↓                    │
+                [input] → [network] → [output]    ─┘ (output can be an "end" signal)
+
+                The hidden state from each word input can be weighted by the word's attention (importance), which is used in decoding
+
+                    [input] → [network]               ─┐
+                                  ↓                    │
+                                H * A                  │
+                                  ↓                    │
+                    [input] → [network]                │
+                                  ↓                    │
+                                H * A                  ├─ Encoding
+                                  ↓                    │
+                    [input] → [network]                │
+                                  ↓                    │
+                                H * A                  │
+                                  ↓                    │
+                    [input] → [network] → [output]    ─┤ (input can be an "end" signal)
+                                  ↓                    │
+                                H * A                  │
+                                  ↓                    │
+                    [input] → [network] → [output]     │ (from this level down, input is the previous output)
+                                  ↓                    │
+                                H * A                  ├─ Decoding
+                                  ↓                    │
+                    [input] → [network] → [output]     │
+                                  ↓                    │
+                                H * A                  │
+                                  ↓                    │
+                    [input] → [network] → [output]    ─┘ (output can be an "end" signal)
+
+                    e.g.
+                    "The tree has grown apples", to get attention scores via neural network training:
+                        Words  "The"  "tree"  "has"  "grown"  "apples"
+                    Attention  0.05    0.35   0.10     0.20     0.30
+
+                    Transformer architecture - optimisation to the recurrent neural network:
+                        Transformers - allowing multiple [inputs] to produce a [H * A] representation in parallel to increase efficiency
+                                       (otherwise, a hidden state is dependent on one preceding it)
+
+                            [input] → [network] → H * A      ─┐
+                                                              │
+                            [input] → [network] → H * A       ├─ Encoding
+                                                              │
+                            [input] → [network] → H * A      ─┘
+
+
+                            At every [input] → [network] → [H * A], [H * A] is individually derived so some data has to be re-added:
+                                [input] + [positional encoding] → n * [self-attention] → [network] → [encoded representation output]
+                                                                  │                              │
+                                                                  └──────── x iterations ────────┘
+
+                            * For a transformer architecture, a hidden state does not directly affect another during encoding
+                            * Self-attention step individually processes an attention score based on all other inputs
+                            * Every hidden state holds context obtained only from the self-attention step
+                            * Multi-headed attention - n * layers of [self-attention] is used to observe multiple facets of the input
+
+                    During decoding:
+                            [input] → [network] → H * A       ─┐ (input can be an "end" signal)
+                                                               │
+                                  Aggregated H * A             │
+                                          ↓                    │
+                            [input] → [network] → [output]     │ (from this level down, input is the previous output)
+                                          ↓                    │
+                                        H * A                  ├─ Decoding
+                                          ↓                    │
+                            [input] → [network] → [output]     │
+                                          ↓                    │
+                                        H * A                  │
+                                          ↓                    │
+                            [input] → [network] → [output]    ─┘ (output can be an "end" signal)
+
+                            At first [input] → [network] → [output] where end signal is used:
+                                [input] + [positional encoding] → n * [self-attention] → [network] → [all encoded representation output]
+                                                                  │                              │                    │
+                                                                  └──────── x iterations ────────┘                    │
+                                                                                                        ┌─────────────┘
+                                [previous word] + [position encoding] → n * [self-attention] → m * [attention] → [network] → [next word]
+                                                                        │                                                │
+                                                                        └───────────────── y iterations ─────────────────┘
+
+                            * Self-attention step is individually processed similar to the encoding, but using existing outputs instead
+                            * Encoder-decoder attention (aggregated hidden states) is used for every step until end-signal is reached

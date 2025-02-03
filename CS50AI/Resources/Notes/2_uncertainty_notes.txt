@@ -1,0 +1,421 @@
+Uncertainty:
+    Use probability to provide an answer
+
+                                N
+* in notes: (n ∈ N)Σ stands for Σ, nΣ stands for Σ
+                                n                n
+Probability:
+    Possible worlds, ω: 0 <= P(ω) <= 1,  (ω ∈ Ω)Σ P(ω) == 1
+
+    Unconditional probability - probability without additional information
+        P(A): Probability of A == true
+    Conditional probability - probability given some revealed evidence (may not be dependent evidence)
+        P(A | B): Probability of A == true given B == true
+    Independent event - probability of event is not affected by the knowledge of another event
+        A and B are independent of each other. For both true, compounded probability that each one is true
+        P(A ∧ B) = P(A | B) * P(B)
+        P(A | B) = P(A)
+        P(A ∧ B) = P(A) * P(B)
+    Dependent event - probability of event is affected by the knowledge of another event
+        A is dependent on B. For both true, compound probability of parent event B with probability of A given B
+        P(A ∧ B) = P(A | B) * P(B)
+
+    Random variable - variable in probability theory that can take on a domain of different values
+        e.g. P(Alphabet) = P(A) + P(B) + ... + P(Z), Random variable, Alphabet = Probability that random keypress is alphabet
+    Probability distribution - vector of probabilities of a random variable in an order that is preconceived
+        e.g  P(Keypress = Alphabet) = 0.6
+             P(Keypress = Number) = 0.25
+             P(Keypress = Symbol) = 0.05
+             𝐏(Keypress) = <0.6, 0.25, 0.05>
+    Joint probability - representation of probabilities over multiple configuration of conditions
+        e.g.
+        For 2 consecutive random keypresses (not ordered, independent)
+
+              P(A ∧ B)  P(A = Alphabet)  P(A = ¬Alphabet)  Total
+         P(B = Number)  0.6*0.25 = 0.15  0.4*0.25 = 0.1    0.15 + 0.1 = 0.25
+        P(B = ¬Number)  0.6*0.75 = 0.45  0.4*0.75 = 0.3    0.45 + 0.3 = 0.75
+                 Total  0.15+0.45 = 0.6  0.1+0.3 = 0.4     1
+
+
+        For 2 consecutive psuedo-random keypresses (ordered, second press dependent on first (e.g. proximity of keys))
+
+        (given A is first key, B is second key, P(A = Alphabet) = 0.6, P(B = Alphabet) = 0.7, P(B = Alphabet | A = Alphabet) = 0.7)
+
+                    P(A ∧ B)  P(A = Alphabet)  P(A = ¬Alphabet)  Total
+            P(B = Alphabet)  0.7*0.6 = 0.42   x = 0.28          0.42+0.28 = 0.7
+            P(B = ¬Alphabet)  0.3*0.6 = 0.18   y = 0.12          0.18+0.12 = 0.3
+                    Total  0.42+0.18 = 0.6  0.28+0.12 = 0.4   1
+
+                Calculations (without Joint Probability table)
+                    P(B = Alphabet | A = Alphabet) = 0.7
+                    P(B = ¬Alphabet | A = Alphabet) = 1 - P(B = Alphabet | A = Alphabet)
+                                                    = 1 - 0.7
+                                                    = 0.3
+
+                    P(A = Alphabet | B = Alphabet) = P(A = Alphabet ∧ B = Alphabet) / P(B = Alphabet)
+                                                = 0.42 / 0.7
+                                                = 0.6 (coincidence == P(A = Alphabet) since 0.42 <= P(B = Alphabet) <= 0.82 is arbitrary)
+                    P(A = ¬Alphabet | B = Alphabet) = 1 - P(A = Alphabet | B = Alphabet)
+                                                    = 1 - 0.6
+                                                    = 0.4
+                    P(B = Alphabet | A = ¬Alphabet) = P(A = ¬Alphabet | B = Alphabet) * P(B = Alphabet) / P(A = ¬Alphabet)
+                                                    = 0.4 * 0.7 / (1 - 0.6)
+                                                    = 0.7
+                    x = P(B = Alphabet ∧ A = ¬Alphabet)
+                    = P(B = Alphabet | A = ¬Alphabet) * P(A = ¬Alphabet)
+                    = 0.7 * (1 - 0.6)
+                    = 0.28
+                    (P(B = Alphabet | A = ¬Alphabet) is not necessary):
+                    P(B = Alphabet ∧ A = ¬Alphabet) = P(A = ¬Alphabet ∧ B = Alphabet)
+                                                    = P(A = ¬Alphabet | B = Alphabet) * P(B = Alphabet)
+                                                    = 0.4 * 0.7
+                                                    = 0.28
+
+                    P(B = ¬Alphabet | A = ¬Alphabet) = 1 - P(B = Alphabet | A = ¬Alphabet)
+                                                    = 1 - 0.7
+                                                    = 0.3
+                    y = P(B = ¬Alphabet ∧ A = ¬Alphabet)
+                    = P(B = ¬Alphabet | A = ¬Alphabet) * P(A = ¬Alphabet)
+                    = 0.3 * (1 - 0.6)
+                    = 0.12
+
+                Calculations (with Joint Probability table)
+                    P(A = Alphabet) = 0.6 >> P(A = ¬Alphabet) = 0.4
+                    P(B = Alphabet) = 0.7 >> P(B = ¬Alphabet) = 0.3
+                    P(B = Alphabet | A = Alphabet) = 0.7
+
+                    P(B = Alphabet ∧ A = Alphabet) = P(B = Alphabet | A = Alphabet) * P(A = Alphabet)
+                                                   = 0.7 * 0.6
+                                                   = 0.42
+                    P(B = ¬Alphabet ∧ A = Alphabet) = P(A = Alphabet) - Σ P(B = ¬(¬Alphabet) ∧ A = Alphabet)
+                                                    = 0.6 - 0.42
+                                                    = 0.18
+                    P(A = ¬Alphabet ∧ B = Alphabet) = P(B = Alphabet) - Σ P(A = ¬(¬Alphabet) ∧ B = Alphabet)
+                                                    = 0.7 - 0.42
+                                                    = 0.28
+                    P(B = ¬Alphabet ∧ B = ¬Alphabet) = P(A = ¬Alphabet) - Σ P(B = ¬(¬Alphabet) ∧ A = ¬Alphabet)
+                                                    = 0.4 - 0.28
+                                                    = 0.12
+                                                    Or
+                                                    = P(B = ¬Alphabet) - Σ P(A = ¬(¬Alphabet) ∧ B = ¬Alphabet)
+                                                    = 0.3 - 0.18
+                                                    = 0.12
+
+                Representing probability distribution for B if A = ¬Alphabet
+                    𝐏(B | A = ¬Alphabet) = 𝐏(B ∧ A = ¬Alphabet) / P(A = ¬Alphabet)
+                                        = c𝐏(B ∧ A = ¬Alphabet), constant c = 1 / P(A = ¬Alphabet)
+                                        = c<0.28, 0.12>
+                                        = (1 / (1 - 0.6)) * <0.28, 0.12>
+                                        = <0.7, 0.3>
+
+
+        (given A is first key, B is second key, P(A = Alphabet) = 0.6, P(B = Alphabet) = 0.5, P(B = Alphabet | A = Alphabet) = 0.7)
+
+                    P(A ∧ B)  P(A = Alphabet)  P(A = ¬Alphabet)  Total
+            P(B = Alphabet)  0.7*0.6 = 0.42   x = 0.08          0.42+0.08 = 0.5
+            P(B = ¬Alphabet)  0.3*0.6 = 0.18   y = 0.32          0.18+0.32 = 0.5
+                    Total  0.42+0.18 = 0.6  0.08+0.32 = 0.4   1
+
+                Calculations (without Joint Probability table)
+                    P(A = Alphabet | B = Alphabet) = P(A = Alphabet ∧ B = Alphabet) / P(B = Alphabet)
+                                                = 0.42 / 0.5
+                                                = 0.84
+                    P(A = ¬Alphabet | B = Alphabet) = 1 - P(A = Alphabet | B = Alphabet)
+                                                    = 1 - 0.84
+                                                    = 0.16
+                    x = P(A = ¬Alphabet ∧ B = Alphabet)
+                    = P(A = ¬Alphabet | B = Alphabet) * P(B = Alphabet)
+                    = 0.16 * 0.5
+                    = 0.08
+
+                    P(B = Alphabet | A = ¬Alphabet) = P(A = ¬Alphabet ∧ B = Alphabet) / P(A = ¬Alphabet)
+                                                    = 0.08 / (1 - 0.6)
+                                                    = 0.2
+                    P(B = ¬Alphabet | A = ¬Alphabet) = 1 - P(B = Alphabet | A = ¬Alphabet)
+                                                    = 1 - 0.2
+                                                    = 0.8
+                    y = P(B = ¬Alphabet ∧ A = ¬Alphabet)
+                    = P(B = ¬Alphabet | A = ¬Alphabet) * P(A = ¬Alphabet)
+                    = 0.8 * (1 - 0.6)
+                    = 0.32
+
+                Calculations (with Joint Probability table)
+                    P(A = Alphabet) = 0.6 >> P(A = ¬Alphabet) = 0.4
+                    P(B = Alphabet) = 0.5 >> P(B = ¬Alphabet) = 0.5
+                    P(B = Alphabet | A = Alphabet) = 0.7
+
+                    P(B = Alphabet ∧ A = Alphabet) = P(B = Alphabet | A = Alphabet) * P(A = Alphabet)
+                                                   = 0.7 * 0.6
+                                                   = 0.42
+                    P(B = ¬Alphabet ∧ A = Alphabet) = P(A = Alphabet) - Σ P(B = ¬(¬Alphabet) ∧ A = Alphabet)
+                                                    = 0.6 - 0.42
+                                                    = 0.18
+                    P(A = ¬Alphabet ∧ B = Alphabet) = P(B = Alphabet) - Σ P(A = ¬(¬Alphabet) ∧ B = Alphabet)
+                                                    = 0.5 - 0.42
+                                                    = 0.08
+                    P(A = ¬Alphabet ∧ B = ¬Alphabet) = P(B = ¬Alphabet) - Σ P(A = ¬(¬Alphabet) ∧ B = ¬Alphabet)
+                                                     = 0.5 - 0.18
+                                                     = 0.32
+                                                     Or
+                                                     = P(A = ¬Alphabet) - Σ P(B = ¬(¬Alphabet) ∧ A = ¬Alphabet)
+                                                     = 0.4 - 0.08
+                                                     = 0.32
+
+                Representing probability distribution for B if A = ¬Alphabet
+                    𝐏(B | A = ¬Alphabet) = 𝐏(B ∧ A = ¬Alphabet) / P(A = ¬Alphabet)
+                                        = c𝐏(B ∧ A = ¬Alphabet), constant c = 1 / P(A = ¬Alphabet)
+                                        = c<0.08, 0.32>
+                                        = (1 / (1 - 0.6)) * <0.08, 0.32>
+                                        = <0.2, 0.8>
+
+    Normalisation - making sure probabilities sum to 1 by multiplying to a constant
+        Conditional probability:
+            P(B | A) = P(B ∧ A) / P(A)
+                     = P(B ∧ A) * c, constant c = 1 / P(A)
+
+        Marginal probability - probability of an event occurring regardless of outcomes of other variables:
+        *Normalisation not needed if (Σ all joint probabilities) = 1
+            P(A) ∝ Σ(P(A ∧ B ∧ ...), P(A ∧ C ∧ ...), ...)         # Σ all joint probabilities that include P(A)
+            c = Σ(P(A ∧ B ∧ ...), P(A ∧ C ∧ ...), P(B ∧ C ∧ ...)) # Σ all joint probabilities
+            P(A) = Σ(P(A ∧ B ∧ ...), P(A ∧ C ∧ ...), ...) / c     # Σ all joint probabilities that include P(A) / Σ all joint probabilities
+
+                e.g.
+                Events: A, B
+                P(A) ∝ P(A) + P(A ∧ B)
+                P(A) ∝ P(A) + P(A)*P(B)
+
+                c = P(A) + P(A ∧ B) + P(B) + P()
+                c = P(A) + P(A)*P(B) +P(B) + P()
+
+                       P(A) + P(A)*P(B)
+                P(A) = ────────────────────────────
+                       P(A) + P(A)*P(B) +P(B) + P()
+
+                e.g.
+                Events: A, B, C
+                P(A) ∝ P(A) + P(A ∧ B) + P(A ∧ C) + P(A ∧ B ∧ C)
+                P(A) ∝ P(A) + P(A)*P(B) + P(A)*P(C) + P(A)*P(B)*P(C)
+
+                c = P(A) + P(B) + P(C) + P(A ∧ B) + P(A ∧ C) + P(B ∧ C) + P(A ∧ B ∧ C) + P()
+                c = P(A) + P(B) + P(C) + P(A)*P(B) + P(A)*P(C) + P(B)*P(C) + P(A)*P(B)*P(C) + P()
+
+                       P(A)        +        P(A)*P(B) + P(A)*P(C)       +       P(A)*P(B)*P(C)
+                P(A) = ─────────────────────────────────────────────────────────────────────────────
+                       P(A) + P(B) + P(C) + P(A)*P(B) + P(A)*P(C) + P(B)*P(C) + P(A)*P(B)*P(C) + P()
+
+    Bayes' Rule
+        Working steps:
+        P(A ∧ B) = P(A | B) * P(B)
+        P(B ∧ A) = P(B | A) * P(A)
+        P(A ∧ B) = P(B ∧ A)
+        P(A | B) * P(B) = P(B | A) * P(A)
+
+        P(A) = (P(A | B) * P(B)) / P(B | A)
+        *Think as: Probability of only A true is the probability of both true, P(A ∧ B), lest B true given that A is true, P(B | A)
+
+        Actual Bayes' Rule:
+        P(B | A) =  (P(A | B) * P(B)) / P(A)
+        *Think as: Knowing probability of both true, P(A ∧ B) = P(A | B) * P(B), find the ratio of A occurrance with B
+
+        e.g.
+        Given I shouted, what is the probability I stubbed my toe?
+        Known:
+        10% of toe stubs result in a shout
+        1% of days I stub my toe
+        5% of days I shout
+
+        P(Toe | Shout) = (P(Shout | Toe) * P(Toe)) / P(Shout)
+                       = (0.1 * 0.01) / 0.05
+                       = 0.02
+        Hence, given a shout, there is 0.02 probability / 2% chance that it was because I have stubbed my toe
+
+        Knowing P(Visible Effect | Unknown Cause) -> Derived P(Unknown Cause | Visible Effect),
+        where visible effect is shouting, unknown cause is stubbing toe (out of other reasons e.g. touch hot kettle)
+
+    Probability Rules
+        Negation
+            P(¬A) = 1 - P(A)
+        Inclusion-Exclusion
+            P(A ∨ B) = P(A) + P(B) - P(A ∧ B)
+        Marginalisation
+            P(A) = P(A ∧ B) + P(A ∧ ¬B)
+            P(A) = nΣ P(A ∧ Bn)
+        Conditioning (Extended from Marginalisation)
+            P(A) = P(A | B) * P(B) + P(A | ¬B) * P(¬B)
+            P(A) = nΣ (P(A | Bn) * P(Bn))
+
+Application:
+    Bayensian Network - data structure representing dependencies among random variables
+        - Directed graph
+        - Nodes representing random variables
+        - Arrows between nodes representing dependency
+            - Parents(x) -> x  >>  P(X | Parent(x))
+        - Nodes have probability distribution 𝐏(X | Parents(x))
+
+        e.g.
+        Hot day                             Hot day  {Very hot, Temperate, Very cold}
+         │     ↘
+         │    Turn on air-conditioner       Air-con  {Yes, No}
+         ↓           ↙
+        Sweaty and uncomfortable            Sweat    {A lot, A little, None}
+              ↓
+        Go for shower                       Shower   {Yes, No}
+
+
+        𝐏(Hot day) = <0.4, 0.5, 0.1>
+             │                      ↘
+             │                      𝐏(Air-con | Hot day = Very hot) = <0.8, 0.2>
+             │                      𝐏(Air-con | Hot day = Temperate) = <0.7, 0.3>
+             │                      𝐏(Air-con | Hot day = Very cold) = <0.2, 0.8>
+             ↓                                              ↘
+        𝐏(Sweat | Hot day = Very hot) = <0.7, 0.3>          𝐏(Sweat | Air-con = Yes) = <0.1, 0.9>
+        𝐏(Sweat | Hot day = Temperate) = <0.5, 0.5>         𝐏(Sweat | Air-con = No) = <0.2, 0.8>
+        𝐏(Sweat | Hot day = Very cold) = <0.1, 0.9>          ╱
+                                 ↓                          ↙
+                            𝐏(Shower | Sweat = yes) = <0.75, 0.25>
+                            𝐏(Shower | Sweat = no) = <0.4, 0.6>
+
+
+                          𝐏(Hot day)  Very hot  Temperate  Very cold  Total
+                       (Independent)  0.4       0.5        0.1        1
+
+                𝐏(Air-con | Hot day)  Yes  No
+                            Very hot  0.8  0.2
+                           Temperate  0.7  0.3
+                           Very cold  0.2  0.8
+
+        𝐏(Sweat | Hot day ∧ Air-con)  Yes  No       *Different from graph as this is P(Sweat | Hot day ∧ Air-con)
+                      Very hot ∧ Yes  0.5  0.5
+                       Very hot ∧ No  0.6  0.4
+                     Temperate ∧ Yes  0.3  0.7
+                      Temperate ∧ No  0.4  0.6
+                     Very cold ∧ Yes  0.1  0.9
+                      Very cold ∧ No  0.2  0.8
+
+                   𝐏(Shower | Sweat)  Yes  No
+                                 Yes  0.75 0.25
+                                  No  0.4  0.6
+
+        Compute Joint Probabilities:
+
+        e.g.
+        Probability of showering on a Very hot day without turning on Air-con and being full of Sweat
+        = P(Hot day = Very hot) * P(Air-con = No | Very hot) * P(Sweat = Yes | Very hot ∧ No) * P(Shower | Sweat)
+        = 0.4 * 0.2 * 0.6 * 0.75
+
+        Inference:
+            Query, X - variable to compute distribution for
+            Evidence variables, E - Observed variables from event, e
+            Hidden variables, H - Non-evidence, non-query variables
+
+            Calculate P(X | e)
+
+            Inference by Enumeration - Consider every possibility for each hidden variable:
+                P(X | e) = c P(X ∧ e) = c * hΣ P(X ∧ e ∧ h)
+                where
+                    X is query variable
+                    e is evidenced variable
+                    h is a set of all possible hidden variable value
+                    constant c = 1 / P(e) normalises result
+
+                e.g.
+                Calculate P(Shower | Hot day)
+                P(Shower | Hot day) = c * P(Shower ∧ Hot day), constant c
+                                    = c(P(Shower ∧ Hot day ∧ air-con ∧ sweat) +
+                                    P(Shower ∧ Hot day ∧ no air-con ∧ sweat) +
+                                    P(Shower ∧ Hot day ∧ air-con ∧ no sweat) +
+                                    P(Shower ∧ Hot day ∧ no air-con ∧ no sweat))
+
+            Inference by Approximation - Run tests to obtain approximate probability
+                Sampling
+                e.g.
+                {Hot day ∧ air-con ∧ no sweat ∧ shower}
+                {Hot day ∧ no air-con ∧ no sweat ∧ shower}
+                {Temperate ∧ air-con ∧ no sweat ∧ shower}
+                {Hot day ∧ air-con ∧ sweat ∧ no shower}
+                ...
+                Normal sampling:
+                    Check P(X) for independent X by
+                    1.    Counting number of {X fulfilled}
+                    2.    Dividing by total number of samples
+                Rejection sampling (can be used for dependent variables):
+                    Check P(X | e) by
+                    1.    Counting number of {X ∧ e fulfilled}
+                    2.    Dividing by number of focused samples where {e unfulfilled are excluded}
+
+                Rejection sampling's drawback: wasted samples that do not fulfill e
+                Alternate sampling method: Likelihood weighting
+
+                Likelihood weighting:
+                    Check P(X | e) bt
+                    1.    Fixing e == true
+                    2.    Sample non-evidence variables (i.e. query and hidden variables) using Baynesian network
+                    3.    Weight each sample by likelihood (the probability of all the evidence)
+
+                    e.g.
+                    P(Sweat | No air-con)
+
+                    1.    Fixing "No air-con"
+                        >>  {..., no air-con, ..., ...}
+                    2.    Sampling the rest
+                        >> A {Very hot, no air-con, sweat, shower}
+                        >> B {Very hot, no air-con, no sweat, no shower}
+                    3.    Weight each sample by likelihood (the probability of all the evidence, "no air-con")
+                        >> Sample A:
+                        >> "Sweat" fulfilled
+                        >> P(no air-con | very hot) = 0.2
+                        >> Sample A weight: 0.2
+                        >> Sample B:
+                        >> "Sweat" unfulfilled
+                        >> P(Sweat | No air-con) = Σ(Number of fulfilled sample * Weight) / Σ(Number of samples)
+
+    Uncertainty over Time
+        Markov assumption - The current state only depends on a finite fixed number of previous states
+        Markov chain - Sequence of random variables which distribution follows the Markov assumption
+
+        e.g.
+        Weather_t is defined as weather condition at day, t. Each day is a different variable.
+        P(Weather_t = Sunny | Weather_t+1 = Sunny) = 0.8
+        P(Weather_t = Rainy | Weather_t+1 = Sunny) = 0.2
+        P(Weather_t = Rainy | Weather_t+1 = Rainy) = 0.7
+        P(Weather_t = Sunny | Weather_t+1 = Rainy) = 0.3
+
+        A Markov chain with Markov assumtion of previous states = 1 can be created:
+
+        Sunny -> Sunny -> Rainy -> Rainy -> Sunny -> Sunny -> Sunny -> ...
+         t=0      t=1      t=2      t=3      t=4      t=5      t=6
+
+    Sensor model - Interprete an observation/evidence variable into a hidden state
+        e.g.
+        Observation        // Hidden state
+        Humidity level     // Precipitation
+        Audio waveform     // Voice recognition
+        Recent key strokes // Words
+
+    Hidden Markov model - Markov chain of hidden states with each state generating an observable event
+        Sensor Markov assumption - The evidence variable depends only on the corresponding observed state
+
+        e.g.
+        Sensor model:
+        P(Voice = Conversation | Observed = audio_a) = 0.8
+        P(Voice = Ambient | Observed = audio_a) = 0.2
+        P(Voice = Conservation | Observed = audio_b) = 0.4
+        P(Voice = Ambient | Observed = audio_b) = 0.6
+
+        Hidden Markov model:
+        (Observed)
+        audio_a -> audio_a-> audio_a -> audio_b -> audio_b -> audio_b -> audio_a -> audio_a -> ... (how the conversation is sensed)
+          ↑          ↑         ↑          ↑          ↑          ↑          ↑          ↑
+        Human   -> Human  -> Human  ->  Human   -> Ambient -> Ambient -> Human   -> Human   -> ... (how the conversation is estimated)
+        (Hidden)                                 able to estimate how the conservation will go ↗
+                    (P(continue talking | human talking), P(pause | human talking), P(pause | pause), P(resume conversation | pause))
+
+        Tasks
+            Filtering - given a chain of observations from start until now, calculate distribution for current state
+                        (in context, given a segment of audio, how likely was it a person speaking or just noise in the microphone?)
+            Predicting - given a chain of observations from start until now, calculate distribution for future state
+                        (in context, given a chain of audio segments, how likely will the conversation go on?)
+            Smoothing - given a chain of observations from start until now, calculate distribution for past state
+                        (in context, given a chain of audio segments, how likely did the conversation spanned that far back?)
+            Explaining - given a chain of observations from start until now, what is the most likely sequence of underlying states?
+                        (in context, where were the pauses, when did they speak, how did the whole conservation sound like?)

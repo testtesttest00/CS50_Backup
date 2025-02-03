@@ -1,0 +1,8 @@
+In an AI:
+Search: Look for solutions
+Knowledge: Calculate with a given understanding
+Uncertainty: Use probability to provide an answer
+Optimization: Choosing the best option
+Learning: Generate preferences from existing data
+Neural Networks: Layer multiple algorithms to compute output
+Language: Formulate sentences of human language

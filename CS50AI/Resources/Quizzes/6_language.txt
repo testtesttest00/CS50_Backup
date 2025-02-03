@@ -1,0 +1,75 @@
+Question
+Answer: (  ) ✓ ✗
+Reason:
+Error:
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 1
+
+Consider the below context-free grammar, where S is the start symbol.
+
+-    S -> NP V
+-    NP -> N | A NP
+-    A -> "small" | "white"
+-    N -> "cats" | "trees"
+-    V -> "climb" | "run"
+
+Consider also the following four sentences.
+
+1.    Cats run.
+2.    Cats climb trees.
+3.    Small cats run.
+4.    Small white cats climb.
+
+Of the four sentences above, which sentences can be derived from the context-free grammar?
+
+Answer: 1, 3, and 4 ✓
+Reason: 1 - (NP = N: Cats) (V: run)
+        2 - No possible (V N: climb trees) from NP V
+        3 - (NP = A NP = A N: Small cats) (V: run)
+        4 - (NP = A NP = A A NP = A A N: Small white cats) (V: climb)
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 2
+
+Which of the following is not a true statement?
+
+1.    Attention mechanisms can be used to determine which parts of an input sequence are most important to focus on.
+2.    One-hot representations of words better represent word meaning than distributed representations of words.
+3.    Transformers can be faster to train than recurrent neural networks because they are more easily parallelized.
+4.    A Naive Bayes Classifier assumes that the order of words doesn’t matter when determining how they should be classified.
+
+Answer ( 2 ) ✓
+Reason: One-hot representations only regard positional importance with no weights for meanings
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 3
+
+Why is “smoothing” useful when applying Naive Bayes?
+
+1.    Smoothing allows Naive Bayes to
+      better handle cases where evidence has never appeared for a particular category.
+
+2.    Smoothing allows Naive Bayes to
+      better handle cases where there are many categories to classify between, instead of just two.
+
+3.    Smoothing allows Naive Bayes to
+      be less “naive” by not assuming that evidence is conditionally independent.
+
+4.    Smoothing allows Naive Bayes to
+      turn a conditional probability of evidence given a category into a probability of a category given evidence.
+
+Answer ( 1 ) ✓
+Reason: Laplace smoothing makes sure each evidence has at least one appearance to keep probabilities non-zero
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Question 4
+
+From the phrase “must be the truth”, how many word n-grams of length 2 can be extracted?
+
+Answer: 3 ✓
+Reason: "must be", "be the", "the truth"

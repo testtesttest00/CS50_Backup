@@ -1,0 +1,12 @@
+hello! this is my final project for cs50r. my project is an implementation of the board game, tic-tac-toe, where two players
+win by taking turns to try and connect three of their symbols consecutively.
+
+--------------------------------------------------------------------------------
+
+your project’s title;				        	tictactoe
+your name; 						                yi kang
+your GitHub and edX usernames;		        	git-testtesttest00 // edx-testtesttest_0
+your city and country;					        singapore // singapore
+and, the date you have recorded this video.		2 november 2024
+
+--------------------------------------------------------------------------------
